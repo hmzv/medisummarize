@@ -1,0 +1,6 @@
+SYNTHETIC — NOT A REAL PATIENT
+Prescription list (fictional)
+Date: 13 January 2026
+Amlodipine 5 mg nightly is listed.
+No other medications are listed on this page.
+This file is a demonstration fixture. It is not a real prescription.

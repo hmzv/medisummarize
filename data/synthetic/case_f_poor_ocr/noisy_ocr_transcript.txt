@@ -1,0 +1,6 @@
+SYNTHETIC — NOT A REAL PATIENT
+Noisy OCR transcript (fictional, simulated engine output)
+HbAlc 7.B %
+This file simulates a digit/letter substitution (8 read as B, 1 read as l).
+The intended value in expected_text.txt is HbA1c 7.8 %.
+Uncertain extraction must remain uncertain. Do not silently correct clinical numbers.

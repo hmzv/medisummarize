@@ -1,0 +1,23 @@
+# Optional PostgreSQL service for developers who use Docker.
+# This machine currently runs PostgreSQL 18 natively; Docker is not required.
+# If port 5432 is already in use, change the host port mapping.
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: medisummarize
+      POSTGRES_PASSWORD: medisummarize
+      POSTGRES_DB: medisummarize
+    ports:
+      - "5432:5432"
+    volumes:
+      - medisummarize_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U medisummarize -d medisummarize"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  medisummarize_pgdata:

@@ -1,0 +1,7 @@
+SYNTHETIC — NOT A REAL PATIENT
+Discharge note (fictional)
+Date: 14 January 2026
+The patient denied chest pain.
+Continue Amlodipine 5 mg nightly as listed on the prescription page.
+No allergy section is present in this note.
+This file is a demonstration fixture. It is not a real discharge summary.

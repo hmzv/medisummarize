@@ -1,0 +1,4 @@
+SYNTHETIC — NOT A REAL PATIENT
+Laboratory image note (fictional)
+HbA1c 7.8 %
+This image is a demonstration fixture for degraded OCR. The intended value is HbA1c 7.8 %.

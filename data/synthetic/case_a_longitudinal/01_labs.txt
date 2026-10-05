@@ -1,0 +1,7 @@
+SYNTHETIC — NOT A REAL PATIENT
+Outpatient laboratory report (fictional)
+Date: 12 January 2026
+Hemoglobin 13.1 g/dL
+Creatinine 0.9 mg/dL
+Potassium 4.1 mmol/L
+This file is a demonstration fixture. It is not a real laboratory report.

@@ -1,0 +1,7 @@
+SYNTHETIC — NOT A REAL PATIENT
+Clinic note (fictional)
+Date: 18 March 2026
+Lisinopril was stopped.
+Losartan 50 mg daily is listed.
+The patient denied chest pain.
+This file is a demonstration fixture. It conflicts with an earlier note in the same fictional case.

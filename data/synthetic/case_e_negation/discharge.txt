@@ -1,0 +1,6 @@
+SYNTHETIC — NOT A REAL PATIENT
+Discharge note (fictional)
+The patient denied chest pain.
+Amlodipine 5 mg nightly is listed on the medication list.
+No allergy section is present in this note.
+This file is a demonstration fixture. It is not a real discharge summary.

@@ -1,0 +1,6 @@
+SYNTHETIC — NOT A REAL PATIENT
+Clinic note — isolation fixture patient 2 (fictional)
+Recurrent migraine is listed.
+Propranolol nightly is listed.
+The patient denied chest pain.
+This file must be uploaded to a different record container from patient_1.txt.

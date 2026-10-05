@@ -1,0 +1,5 @@
+SYNTHETIC — NOT A REAL PATIENT
+Vital-sign image note (fictional)
+Blood pressure 128/82 mmHg
+Temperature 36.8 C
+This image is a demonstration fixture for OCR. It is not a real chart.

@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=75.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "medisummarize-ai"
+version = "0.1.0"
+description = "Research prototype for secure clinical-document summarization using RAG."
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+  { name = "MediSummarize AI FYP team" },
+]
+dependencies = [
+  "fastapi>=0.115.0",
+  "uvicorn[standard]>=0.32.0",
+  "pydantic>=2.10.0",
+  "pydantic-settings>=2.6.0",
+  "sqlalchemy>=2.0.36",
+  "alembic>=1.14.0",
+  "psycopg[binary]>=3.2.0",
+  "python-dotenv>=1.0.1",
+  "bcrypt>=4.2.0",
+  "PyJWT>=2.10.0",
+  "python-multipart>=0.0.12",
+  "pymupdf>=1.24.0",
+  "pillow>=11.0.0",
+  "pytesseract>=0.3.13",
+  "numpy>=2.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.3.0",
+  "httpx>=0.28.0",
+]
+
+[tool.setuptools.packages.find]
+include = ["app*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-q"
+filterwarnings = [
+  "ignore::DeprecationWarning",
+]

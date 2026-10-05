@@ -1,0 +1,7 @@
+SYNTHETIC — NOT A REAL PATIENT
+Clinic note (fictional)
+Date: 10 January 2026
+Blood pressure is listed as 138/84 mmHg.
+Lisinopril 10 mg daily is listed.
+The patient denied chest pain.
+This file is a demonstration fixture. It is not a real clinic note.

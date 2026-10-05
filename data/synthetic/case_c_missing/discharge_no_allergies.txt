@@ -1,0 +1,8 @@
+SYNTHETIC — NOT A REAL PATIENT
+Discharge note (fictional)
+Date: 02 February 2026
+The patient denied chest pain.
+Follow-up is listed as outpatient review.
+No allergy section is present in this note.
+No medication list is present in this note.
+This file is a demonstration fixture. Absence of a section is not proof of absence of allergies or medications.

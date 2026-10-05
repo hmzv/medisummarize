@@ -1,0 +1,6 @@
+SYNTHETIC — NOT A REAL PATIENT
+Clinic note — isolation fixture patient 1 (fictional)
+Recurrent migraine is listed.
+Sumatriptan as needed is listed.
+The patient denied chest pain.
+This file must be uploaded to its own record container. Do not mix with patient_2.txt.
