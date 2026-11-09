@@ -1,0 +1,37 @@
+{
+  "dataset": "RxHandBD v3 ML",
+  "doi": "10.17632/dsb5r6vskg.3",
+  "license": "CC BY 4.0",
+  "source": "https://data.mendeley.com/datasets/dsb5r6vskg/3",
+  "archive_sha256": "c6371c0a3a89301c0b6b2eac1d2d49f6f3d8e559a7a71b338655dde0a6a63b51",
+  "official_counts": {
+    "train": 4463,
+    "test": 1115
+  },
+  "experiment_counts": {
+    "validation": 446,
+    "train": 4017,
+    "test": 1115
+  },
+  "unique_labels": 1787,
+  "image_shapes": {
+    "512x512": 5578
+  },
+  "unlabeled_images": [],
+  "repeated_label_rows": 0,
+  "invalid_items": [],
+  "exact_duplicate_groups": 0,
+  "cross_official_split_duplicate_groups": 0,
+  "conflicting_label_groups": 0,
+  "near_duplicate_flags": 8,
+  "split_seed": 1019,
+  "validation_fraction_groups": 0.1,
+  "writer_independent": false,
+  "writer_metadata": "Not supplied in archive labels; prescription/writer leakage cannot be ruled out.",
+  "limitations": [
+    "Word crops only; no full-page layout recognition benchmark.",
+    "Near-duplicate flags need human inspection; they are not established duplicates.",
+    "No writer-independent claim is supported.",
+    "Official test set retained; exact test duplicates excluded from fitting/validation."
+  ]
+}

@@ -18,9 +18,15 @@ from app.services.chunking.service import chunk_extracted_pages
 from app.services.embeddings.providers import get_embedding_provider
 from app.services.records import get_owned_record
 from app.services.retrieval.index_store import delete_record_index, search_record_index, write_record_index
+from app.services.record_lock import record_write_lock
 
 
 def index_owned_record(db: Session, owner_id: uuid.UUID, record_id: uuid.UUID) -> int:
+    with record_write_lock(record_id):
+        return _index_owned_record(db, owner_id, record_id)
+
+
+def _index_owned_record(db: Session, owner_id: uuid.UUID, record_id: uuid.UUID) -> int:
     get_owned_record(db, record_id, owner_id)
     settings = get_settings()
     provider = get_embedding_provider()

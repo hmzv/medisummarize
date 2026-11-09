@@ -9,6 +9,7 @@ from app.api.routes.documents import router as documents_router
 from app.api.routes.health import router as health_router
 from app.api.routes.records import router as records_router
 from app.api.routes.summaries import router as summaries_router
+from app.api.routes.experiments import router as experiments_router
 from app.core.config import get_settings
 from app.core.errors import AppError
 
@@ -40,6 +41,7 @@ def create_app() -> FastAPI:
     application.include_router(records_router, prefix=settings.api_prefix)
     application.include_router(documents_router, prefix=settings.api_prefix)
     application.include_router(summaries_router, prefix=settings.api_prefix)
+    application.include_router(experiments_router, prefix=settings.api_prefix)
 
     @application.exception_handler(AppError)
     async def handle_app_error(_request: Request, exc: AppError) -> JSONResponse:

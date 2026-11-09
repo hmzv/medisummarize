@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "runs": [
+    {
+      "schema_version": 1,
+      "task": "handwriting_word_ocr",
+      "model": "Tesseract",
+      "dataset": "RxHandBD v3 ML",
+      "dataset_sha256": "c6371c0a3a89301c0b6b2eac1d2d49f6f3d8e559a7a71b338655dde0a6a63b51",
+      "split": "validation",
+      "samples": 446,
+      "metrics": {
+        "samples": 446,
+        "cer": 0.7865914371058745,
+        "wer": 1.1130952380952381,
+        "exact_match": 0.011210762331838564,
+        "digit_samples": 15,
+        "digit_sequence_match": 0.0,
+        "normalization": "Unicode NFC, whitespace collapsed, case preserved"
+      },
+      "elapsed_seconds": 198.2970112000039,
+      "created_at": "2026-11-09T20:45:47.744392+00:00",
+      "is_mock": false,
+      "provenance": {
+        "archive_sha256": "c6371c0a3a89301c0b6b2eac1d2d49f6f3d8e559a7a71b338655dde0a6a63b51",
+        "manifest_sha256": "879262ea65489e3fd514ba38d0dd183944299637f0d072a270dd0e5fb84cdf61",
+        "seed": 1019,
+        "python": "3.13.9",
+        "normalization": "NFC + whitespace; case preserved",
+        "tesseract_psm": 7,
+        "decoder": "greedy; max_new_tokens=64",
+        "writer_independent": false,
+        "tesseract_version": "5.3.0.20221214"
+      },
+      "limitations": [
+        "Cropped words, not whole handwritten pages.",
+        "No verified writer-independent split.",
+        "Imported results require researcher review."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,541 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-09T21:22:51.635744+00:00",
+  "title": "Design System: MediSummarize AI",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Primary",
+        "tonalRamp": [
+          "oklch(15% 0.0894 189.76)",
+          "oklch(26% 0.0894 189.76)",
+          "oklch(38% 0.0894 189.76)",
+          "oklch(49% 0.0894 189.76)",
+          "oklch(61% 0.0894 189.76)",
+          "oklch(72% 0.0894 189.76)",
+          "oklch(84% 0.0894 189.76)",
+          "oklch(95% 0.0894 189.76)"
+        ]
+      },
+      "primary-deep": {
+        "role": "primary",
+        "displayName": "Primary Deep",
+        "tonalRamp": [
+          "oklch(15% 0.0711 192.16)",
+          "oklch(26% 0.0711 192.16)",
+          "oklch(38% 0.0711 192.16)",
+          "oklch(49% 0.0711 192.16)",
+          "oklch(61% 0.0711 192.16)",
+          "oklch(72% 0.0711 192.16)",
+          "oklch(84% 0.0711 192.16)",
+          "oklch(95% 0.0711 192.16)"
+        ]
+      },
+      "rail": {
+        "role": "primary",
+        "displayName": "Rail",
+        "tonalRamp": [
+          "oklch(15% 0.0534 214.31)",
+          "oklch(26% 0.0534 214.31)",
+          "oklch(38% 0.0534 214.31)",
+          "oklch(49% 0.0534 214.31)",
+          "oklch(61% 0.0534 214.31)",
+          "oklch(72% 0.0534 214.31)",
+          "oklch(84% 0.0534 214.31)",
+          "oklch(95% 0.0534 214.31)"
+        ]
+      },
+      "rail-active": {
+        "role": "primary",
+        "displayName": "Rail Active",
+        "tonalRamp": [
+          "oklch(15% 0.0737 203.81)",
+          "oklch(26% 0.0737 203.81)",
+          "oklch(38% 0.0737 203.81)",
+          "oklch(49% 0.0737 203.81)",
+          "oklch(61% 0.0737 203.81)",
+          "oklch(72% 0.0737 203.81)",
+          "oklch(84% 0.0737 203.81)",
+          "oklch(95% 0.0737 203.81)"
+        ]
+      },
+      "rail-hover": {
+        "role": "primary",
+        "displayName": "Rail Hover",
+        "tonalRamp": [
+          "oklch(15% 0.0640 208.59)",
+          "oklch(26% 0.0640 208.59)",
+          "oklch(38% 0.0640 208.59)",
+          "oklch(49% 0.0640 208.59)",
+          "oklch(61% 0.0640 208.59)",
+          "oklch(72% 0.0640 208.59)",
+          "oklch(84% 0.0640 208.59)",
+          "oklch(95% 0.0640 208.59)"
+        ]
+      },
+      "rail-text": {
+        "role": "neutral",
+        "displayName": "Rail Text",
+        "tonalRamp": [
+          "oklch(15% 0.0196 208.75)",
+          "oklch(26% 0.0196 208.75)",
+          "oklch(38% 0.0196 208.75)",
+          "oklch(49% 0.0196 208.75)",
+          "oklch(61% 0.0196 208.75)",
+          "oklch(72% 0.0196 208.75)",
+          "oklch(84% 0.0196 208.75)",
+          "oklch(95% 0.0196 208.75)"
+        ]
+      },
+      "ground": {
+        "role": "neutral",
+        "displayName": "Ground",
+        "tonalRamp": [
+          "oklch(15% 0.0043 197.09)",
+          "oklch(26% 0.0043 197.09)",
+          "oklch(38% 0.0043 197.09)",
+          "oklch(49% 0.0043 197.09)",
+          "oklch(61% 0.0043 197.09)",
+          "oklch(72% 0.0043 197.09)",
+          "oklch(84% 0.0043 197.09)",
+          "oklch(95% 0.0043 197.09)"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Surface",
+        "tonalRamp": [
+          "oklch(15% 0.0000 89.88)",
+          "oklch(26% 0.0000 89.88)",
+          "oklch(38% 0.0000 89.88)",
+          "oklch(49% 0.0000 89.88)",
+          "oklch(61% 0.0000 89.88)",
+          "oklch(72% 0.0000 89.88)",
+          "oklch(84% 0.0000 89.88)",
+          "oklch(95% 0.0000 89.88)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "tonalRamp": [
+          "oklch(15% 0.0383 224.06)",
+          "oklch(26% 0.0383 224.06)",
+          "oklch(38% 0.0383 224.06)",
+          "oklch(49% 0.0383 224.06)",
+          "oklch(61% 0.0383 224.06)",
+          "oklch(72% 0.0383 224.06)",
+          "oklch(84% 0.0383 224.06)",
+          "oklch(95% 0.0383 224.06)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Muted",
+        "tonalRamp": [
+          "oklch(15% 0.0295 218.31)",
+          "oklch(26% 0.0295 218.31)",
+          "oklch(38% 0.0295 218.31)",
+          "oklch(49% 0.0295 218.31)",
+          "oklch(61% 0.0295 218.31)",
+          "oklch(72% 0.0295 218.31)",
+          "oklch(84% 0.0295 218.31)",
+          "oklch(95% 0.0295 218.31)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Line",
+        "tonalRamp": [
+          "oklch(15% 0.0160 216.68)",
+          "oklch(26% 0.0160 216.68)",
+          "oklch(38% 0.0160 216.68)",
+          "oklch(49% 0.0160 216.68)",
+          "oklch(61% 0.0160 216.68)",
+          "oklch(72% 0.0160 216.68)",
+          "oklch(84% 0.0160 216.68)",
+          "oklch(95% 0.0160 216.68)"
+        ]
+      },
+      "banner": {
+        "role": "neutral",
+        "displayName": "Banner",
+        "tonalRamp": [
+          "oklch(15% 0.0086 205.89)",
+          "oklch(26% 0.0086 205.89)",
+          "oklch(38% 0.0086 205.89)",
+          "oklch(49% 0.0086 205.89)",
+          "oklch(61% 0.0086 205.89)",
+          "oklch(72% 0.0086 205.89)",
+          "oklch(84% 0.0086 205.89)",
+          "oklch(95% 0.0086 205.89)"
+        ]
+      },
+      "evidence": {
+        "role": "neutral",
+        "displayName": "Evidence",
+        "tonalRamp": [
+          "oklch(15% 0.0032 197.11)",
+          "oklch(26% 0.0032 197.11)",
+          "oklch(38% 0.0032 197.11)",
+          "oklch(49% 0.0032 197.11)",
+          "oklch(61% 0.0032 197.11)",
+          "oklch(72% 0.0032 197.11)",
+          "oklch(84% 0.0032 197.11)",
+          "oklch(95% 0.0032 197.11)"
+        ]
+      },
+      "evidence-active": {
+        "role": "primary",
+        "displayName": "Evidence Active",
+        "tonalRamp": [
+          "oklch(15% 0.0230 172.85)",
+          "oklch(26% 0.0230 172.85)",
+          "oklch(38% 0.0230 172.85)",
+          "oklch(49% 0.0230 172.85)",
+          "oklch(61% 0.0230 172.85)",
+          "oklch(72% 0.0230 172.85)",
+          "oklch(84% 0.0230 172.85)",
+          "oklch(95% 0.0230 172.85)"
+        ]
+      },
+      "citation": {
+        "role": "primary",
+        "displayName": "Citation",
+        "tonalRamp": [
+          "oklch(15% 0.0163 182.71)",
+          "oklch(26% 0.0163 182.71)",
+          "oklch(38% 0.0163 182.71)",
+          "oklch(49% 0.0163 182.71)",
+          "oklch(61% 0.0163 182.71)",
+          "oklch(72% 0.0163 182.71)",
+          "oklch(84% 0.0163 182.71)",
+          "oklch(95% 0.0163 182.71)"
+        ]
+      },
+      "focus": {
+        "role": "primary",
+        "displayName": "Focus",
+        "tonalRamp": [
+          "oklch(15% 0.1032 186.50)",
+          "oklch(26% 0.1032 186.50)",
+          "oklch(38% 0.1032 186.50)",
+          "oklch(49% 0.1032 186.50)",
+          "oklch(61% 0.1032 186.50)",
+          "oklch(72% 0.1032 186.50)",
+          "oklch(84% 0.1032 186.50)",
+          "oklch(95% 0.1032 186.50)"
+        ]
+      },
+      "ready": {
+        "role": "secondary",
+        "displayName": "Ready",
+        "tonalRamp": [
+          "oklch(15% 0.0379 175.78)",
+          "oklch(26% 0.0379 175.78)",
+          "oklch(38% 0.0379 175.78)",
+          "oklch(49% 0.0379 175.78)",
+          "oklch(61% 0.0379 175.78)",
+          "oklch(72% 0.0379 175.78)",
+          "oklch(84% 0.0379 175.78)",
+          "oklch(95% 0.0379 175.78)"
+        ]
+      },
+      "ready-ink": {
+        "role": "secondary",
+        "displayName": "Ready Ink",
+        "tonalRamp": [
+          "oklch(15% 0.0713 178.84)",
+          "oklch(26% 0.0713 178.84)",
+          "oklch(38% 0.0713 178.84)",
+          "oklch(49% 0.0713 178.84)",
+          "oklch(61% 0.0713 178.84)",
+          "oklch(72% 0.0713 178.84)",
+          "oklch(84% 0.0713 178.84)",
+          "oklch(95% 0.0713 178.84)"
+        ]
+      },
+      "mock": {
+        "role": "secondary",
+        "displayName": "Mock",
+        "tonalRamp": [
+          "oklch(15% 0.0448 85.87)",
+          "oklch(26% 0.0448 85.87)",
+          "oklch(38% 0.0448 85.87)",
+          "oklch(49% 0.0448 85.87)",
+          "oklch(61% 0.0448 85.87)",
+          "oklch(72% 0.0448 85.87)",
+          "oklch(84% 0.0448 85.87)",
+          "oklch(95% 0.0448 85.87)"
+        ]
+      },
+      "mock-ink": {
+        "role": "secondary",
+        "displayName": "Mock Ink",
+        "tonalRamp": [
+          "oklch(15% 0.1030 66.56)",
+          "oklch(26% 0.1030 66.56)",
+          "oklch(38% 0.1030 66.56)",
+          "oklch(49% 0.1030 66.56)",
+          "oklch(61% 0.1030 66.56)",
+          "oklch(72% 0.1030 66.56)",
+          "oklch(84% 0.1030 66.56)",
+          "oklch(95% 0.1030 66.56)"
+        ]
+      },
+      "neutral-status": {
+        "role": "neutral",
+        "displayName": "Neutral Status",
+        "tonalRamp": [
+          "oklch(15% 0.0076 228.86)",
+          "oklch(26% 0.0076 228.86)",
+          "oklch(38% 0.0076 228.86)",
+          "oklch(49% 0.0076 228.86)",
+          "oklch(61% 0.0076 228.86)",
+          "oklch(72% 0.0076 228.86)",
+          "oklch(84% 0.0076 228.86)",
+          "oklch(95% 0.0076 228.86)"
+        ]
+      },
+      "neutral-status-ink": {
+        "role": "neutral",
+        "displayName": "Neutral Status Ink",
+        "tonalRamp": [
+          "oklch(15% 0.0294 225.94)",
+          "oklch(26% 0.0294 225.94)",
+          "oklch(38% 0.0294 225.94)",
+          "oklch(49% 0.0294 225.94)",
+          "oklch(61% 0.0294 225.94)",
+          "oklch(72% 0.0294 225.94)",
+          "oklch(84% 0.0294 225.94)",
+          "oklch(95% 0.0294 225.94)"
+        ]
+      },
+      "imported": {
+        "role": "secondary",
+        "displayName": "Imported",
+        "tonalRamp": [
+          "oklch(15% 0.0161 187.32)",
+          "oklch(26% 0.0161 187.32)",
+          "oklch(38% 0.0161 187.32)",
+          "oklch(49% 0.0161 187.32)",
+          "oklch(61% 0.0161 187.32)",
+          "oklch(72% 0.0161 187.32)",
+          "oklch(84% 0.0161 187.32)",
+          "oklch(95% 0.0161 187.32)"
+        ]
+      },
+      "imported-ink": {
+        "role": "secondary",
+        "displayName": "Imported Ink",
+        "tonalRamp": [
+          "oklch(15% 0.0684 189.56)",
+          "oklch(26% 0.0684 189.56)",
+          "oklch(38% 0.0684 189.56)",
+          "oklch(49% 0.0684 189.56)",
+          "oklch(61% 0.0684 189.56)",
+          "oklch(72% 0.0684 189.56)",
+          "oklch(84% 0.0684 189.56)",
+          "oklch(95% 0.0684 189.56)"
+        ]
+      },
+      "error": {
+        "role": "secondary",
+        "displayName": "Error",
+        "tonalRamp": [
+          "oklch(15% 0.0172 35.34)",
+          "oklch(26% 0.0172 35.34)",
+          "oklch(38% 0.0172 35.34)",
+          "oklch(49% 0.0172 35.34)",
+          "oklch(61% 0.0172 35.34)",
+          "oklch(72% 0.0172 35.34)",
+          "oklch(84% 0.0172 35.34)",
+          "oklch(95% 0.0172 35.34)"
+        ]
+      },
+      "error-ink": {
+        "role": "secondary",
+        "displayName": "Error Ink",
+        "tonalRamp": [
+          "oklch(15% 0.1398 30.18)",
+          "oklch(26% 0.1398 30.18)",
+          "oklch(38% 0.1398 30.18)",
+          "oklch(49% 0.1398 30.18)",
+          "oklch(61% 0.1398 30.18)",
+          "oklch(72% 0.1398 30.18)",
+          "oklch(84% 0.1398 30.18)",
+          "oklch(95% 0.1398 30.18)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Authentication story heading."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Page headings."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Section headings."
+      },
+      "subheading": {
+        "displayName": "Subheading",
+        "purpose": "Summary subsections."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Workspace reading text."
+      },
+      "control": {
+        "displayName": "Control",
+        "purpose": "Standard action labels."
+      },
+      "metadata": {
+        "displayName": "Metadata",
+        "purpose": "Generation and source details."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "control-transition",
+        "value": "background-color 150ms ease-out, border-color 150ms ease-out",
+        "purpose": "Standard button state changes."
+      },
+      {
+        "name": "evidence-transition",
+        "value": "background-color 220ms ease-out, border-color 220ms ease-out",
+        "purpose": "Evidence passage selection."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "animation: none !important; transition: none !important; scroll-behavior: auto !important",
+        "purpose": "CSS reduced-motion preference; JavaScript source navigation also uses automatic scrolling when requested."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "compact-desktop",
+        "value": "1200px"
+      },
+      {
+        "name": "stacked-review",
+        "value": "900px"
+      },
+      {
+        "name": "mobile-shell",
+        "value": "760px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Main record and import actions.",
+      "html": "<button class=\"ds-primary\">Upload documents</button>",
+      "css": ".ds-primary{font-family:var(--font-sans,\"Source Sans 3\",ui-sans-serif,system-ui,sans-serif);display:inline-flex;justify-content:center;align-items:center;gap:9px;padding:10px 17px;border:1px solid #b8cdd2;border-radius:8px;font-size:16px;font-weight:600;line-height:1.5;min-height:44px;white-space:nowrap;cursor:pointer;transition:background-color 150ms ease-out,border-color 150ms ease-out;background:var(--color-accent,#087b76);border-color:var(--color-accent,#087b76);color:#fff}.ds-primary:hover{background:var(--color-accent-dark,#075b59);border-color:var(--color-accent-dark,#075b59)}.ds-primary:focus-visible{outline:3px solid #1d9b91;outline-offset:3px;}.ds-primary:disabled{opacity:.5;cursor:not-allowed}@media(prefers-reduced-motion:reduce){.ds-primary{transition:none}}"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Supporting actions such as generating and exporting a summary.",
+      "html": "<button class=\"ds-secondary\">Generate summary</button>",
+      "css": ".ds-secondary{font-family:var(--font-sans,\"Source Sans 3\",ui-sans-serif,system-ui,sans-serif);display:inline-flex;justify-content:center;align-items:center;gap:9px;padding:10px 17px;border:1px solid #b8cdd2;border-radius:8px;font-size:16px;font-weight:600;line-height:1.5;min-height:44px;white-space:nowrap;cursor:pointer;transition:background-color 150ms ease-out,border-color 150ms ease-out;background:#fff;color:var(--color-ink,#122e38)}.ds-secondary:hover{background:#e9f3f3;border-color:#87adae}.ds-secondary:focus-visible{outline:3px solid #1d9b91;outline-offset:3px;}.ds-secondary:disabled{opacity:.5;cursor:not-allowed}@media(prefers-reduced-motion:reduce){.ds-secondary{transition:none}}"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Authentication and record creation field.",
+      "html": "<label class=\"ds-field-label\">Fictional case label<input class=\"ds-field\" placeholder=\"Case A\" /></label>",
+      "css": ".ds-field-label{font-family:var(--font-sans,\"Source Sans 3\",ui-sans-serif,system-ui,sans-serif);display:block;color:var(--color-ink,#122e38);font-size:15px;font-weight:600}.ds-field{font-family:var(--font-sans,\"Source Sans 3\",ui-sans-serif,system-ui,sans-serif);display:block;width:100%;margin-top:8px;padding:11px 13px;min-height:46px;border:1px solid #b9cfd3;border-radius:7px;font-size:16px;line-height:1.55;background:#fff;color:var(--color-ink,#122e38);caret-color:var(--color-accent,#087b76)}.ds-field::placeholder{color:#5a7379}.ds-field:focus-visible{outline:3px solid #1d9b91;outline-offset:3px;}"
+    },
+    {
+      "name": "Rail Navigation",
+      "kind": "nav",
+      "refersTo": "nav-active",
+      "description": "Contrasting active route within the deep teal navigation rail.",
+      "html": "<nav class=\"ds-rail\" aria-label=\"Workspace\"><a class=\"ds-nav\" aria-current=\"page\" href=\"#records\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M4 5h6l2 2h8v13H4z M8 12h8 M8 16h5\"/></svg>Records</a><a class=\"ds-nav\" href=\"#experiments\">Experiments</a></nav>",
+      "css": ".ds-rail{font-family:var(--font-sans,\"Source Sans 3\",ui-sans-serif,system-ui,sans-serif);background:var(--rail,#0a3d47);padding:12px;display:grid;gap:5px}.ds-nav{display:flex;align-items:center;gap:17px;padding:13px 18px;border-radius:8px;font-size:18px;line-height:1.55;color:#d3e5e8;text-decoration:none}.ds-nav[aria-current=page]{background:#11646b;color:#fff;font-weight:600}.ds-nav:hover{background:#15565f;color:#fff}.ds-nav:focus-visible{outline:3px solid #1d9b91;outline-offset:3px;}"
+    },
+    {
+      "name": "Ready Status",
+      "kind": "chip",
+      "refersTo": "status-ready",
+      "description": "Informational extraction and readiness tag.",
+      "html": "<span class=\"ds-ready\">Extracted</span>",
+      "css": ".ds-ready{font-family:var(--font-sans,\"Source Sans 3\",ui-sans-serif,system-ui,sans-serif);display:inline-block;border-radius:5px;font-size:13px;font-weight:500;line-height:1.3;padding:5px 10px;background:#cceee4;color:#125b4f;white-space:nowrap}"
+    },
+    {
+      "name": "Evidence Passage",
+      "kind": "card",
+      "refersTo": "evidence-passage",
+      "description": "Source excerpt with a distinct active state.",
+      "html": "<article class=\"ds-evidence\" data-active=\"true\"><p class=\"ds-evidence-meta\">discharge-note.txt · page 1</p><p class=\"ds-evidence-text\">SYNTHETIC EXAMPLE. Review this excerpt against the original document.</p><button class=\"ds-source\">Open source page</button></article>",
+      "css": ".ds-evidence{font-family:var(--font-sans,\"Source Sans 3\",ui-sans-serif,system-ui,sans-serif);color:var(--color-ink,#122e38);background:#f8fbfb;border:1px solid var(--color-line,#d1dfe3);border-radius:8px;padding:16px;overflow-wrap:anywhere;transition:background-color 220ms ease-out,border-color 220ms ease-out;scroll-margin-top:24px}.ds-evidence[data-active=true]{background:#dff3ec;border-color:#087b76}.ds-evidence-meta{margin:0 0 12px;font-size:14px;font-weight:600;line-height:1.55;color:#145e60}.ds-evidence-text{margin:0;font-size:16px;line-height:1.7}.ds-source{font-family:var(--font-sans,\"Source Sans 3\",ui-sans-serif,system-ui,sans-serif);display:inline-block;margin-top:14px;border:0;padding:4px 0;background:transparent;color:var(--color-accent-dark,#075b59);font-size:14px;font-weight:600;cursor:pointer}.ds-source:hover{text-decoration:underline;text-underline-offset:4px}.ds-source:focus-visible{outline:3px solid #1d9b91;outline-offset:3px;}@media(prefers-reduced-motion:reduce){.ds-evidence{transition:none;scroll-behavior:auto}}"
+    },
+    {
+      "name": "Citation Marker",
+      "kind": "button",
+      "refersTo": "citation",
+      "description": "Inline action selecting an associated evidence passage.",
+      "html": "<button class=\"ds-citation\" title=\"Show this source passage\">0ee830ed</button>",
+      "css": ".ds-citation{font-family:var(--font-sans,\"Source Sans 3\",ui-sans-serif,system-ui,sans-serif);display:inline-block;border:1px solid #8abdb8;background:#e3f2ef;border-radius:4px;padding:1px 6px;font-size:12px;line-height:1.55;color:#075e58;font-weight:600;cursor:pointer}.ds-citation:hover{background:#b9e5dc}.ds-citation:focus-visible{outline:3px solid #1d9b91;outline-offset:3px;}"
+    },
+    {
+      "name": "Document Selector",
+      "kind": "button",
+      "refersTo": "document-selector",
+      "description": "Source document entry in the horizontally scrolling strip.",
+      "html": "<button class=\"ds-document\"><strong>prescription.txt</strong><span class=\"ds-document-tag\">Extracted</span></button>",
+      "css": ".ds-document{font-family:var(--font-sans,\"Source Sans 3\",ui-sans-serif,system-ui,sans-serif);display:flex;align-items:center;gap:15px;text-align:left;padding:16px 18px;border:1px solid #bbd0d6;border-radius:9px;background:#fff;color:var(--color-ink,#122e38);cursor:pointer}.ds-document strong{font-size:16px;overflow-wrap:anywhere;flex:1;min-width:90px}.ds-document:hover{background:#e8f5f3;border-color:var(--color-accent,#087b76)}.ds-document:focus-visible{outline:3px solid #1d9b91;outline-offset:3px;}.ds-document-tag{border-radius:5px;font-size:13px;font-weight:500;line-height:1.3;padding:5px 10px;background:#cceee4;color:#125b4f;white-space:nowrap}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Clinical clarity",
+    "overview": "The approved world uses deep teal navigation, mist ground, white reading surfaces, humanist typography, and cool fine dividers. The interface supports careful comparison: actions are compact, source passages stay legible, and selected evidence receives a distinct tonal state.\n\nThe system is restrained and task focused. Real content determines pane height; mock output, extraction state, and imported measurements retain visible labels. The implementation is the authority for these tokens: `frontend/src/clinical.css` loads after `frontend/src/index.css` in `frontend/src/main.tsx`, preserving base structure while replacing the legacy palette and typography.",
+    "keyCharacteristics": [
+      "Deep teal navigation and a single teal action family.",
+      "White reading panes on a mist ground with fine cool borders.",
+      "Source Sans 3 throughout, with generous body leading.",
+      "Explicit evidence selection, visible processing states, and scoped scrolling."
+    ],
+    "rules": [
+      {
+        "name": "The Evidence State Rule",
+        "body": "Keep the selected passage fill and teal border together; preserve text labels for mock, ready, imported, and unrun states.",
+        "section": "colors"
+      },
+      {
+        "name": "The Reading First Rule",
+        "body": "Preserve body leading and wrapping when content grows; shorten layout through reflow rather than shrinking source text.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat Reading Rule",
+        "body": "Use tonal layering and borders to separate reading surfaces; preserve clear keyboard outlines.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do keep the self-hosted Source Sans 3 family across headings, body, and source excerpts.",
+      "Do pair evidence selection with both a tinted fill and a teal border.",
+      "Do stack reading panes at the established breakpoint and keep document/table scrolling local.",
+      "Do preserve keyboard outlines and the reduced-motion preference in CSS and JavaScript navigation.",
+      "Do retain visible mock, imported, ready, and unrun labels alongside semantic colors."
+    ],
+    "donts": [
+      "Don't copy legacy green or serif overrides from the earlier stylesheet as current system tokens.",
+      "Don't add decorative shadows to reading surfaces whose hierarchy is already expressed by tone and stroke.",
+      "Don't shrink source text to fit the synthetic mockup's shorter content.",
+      "Don't conflate an inline citation selection with the separate action to open the source page."
+    ]
+  }
+}

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { Claim, EvidencePassage, SummaryResponse } from "../api/client";
+import { scrollToSource } from "../utils/sourceNavigation";
 
 export function evidenceAnchorId(passageId: string): string {
   return `evidence-${passageId}`;
@@ -29,47 +30,43 @@ export function SummaryReview({ summary, onOpenSource, recordLabel = "Synthetic 
   function goToEvidence(passageId: string) {
     setActiveId(passageId);
     // Keep the evidence in view. Opening the full source is a separate action.
-    window.document.getElementById(evidenceAnchorId(passageId))?.scrollIntoView({
-      behavior: "smooth",
-      block: "center",
-    });
+    scrollToSource(evidenceAnchorId(passageId));
   }
 
   return (
     <div className="summary-review">
-      <div className="summary-toolbar"><div><h2>Structured summary</h2><p>Generated {new Date(summary.created_at).toLocaleString()} · {summary.generation_model}</p></div><div className="export-actions"><button className="button small" onClick={() => exportSummary(summary, recordLabel, "txt")}>Export text</button><button className="button small" onClick={() => exportSummary(summary, recordLabel, "json")}>Export JSON</button></div></div>
       <div className="summary-columns">
-      <div className="space-y-3 text-sm">
+      <div className="draft-pane">
+        <div className="pane-heading"><h2>Draft summary</h2><span className={`status-label ${summary.is_mock ? "mock" : "ready"}`}>{summary.is_mock ? "Mock output" : "Research output"}</span></div>
+        <p className="generation-meta">Generated {new Date(summary.created_at).toLocaleString()} · {summary.generation_model}</p>
         {summary.is_mock ? (
-          <p className="font-semibold text-red-800">
+          <p className="mock-disclosure">
             MOCK/TEST OUTPUT — not a real-model result. Do not use in evaluation
             metrics.
           </p>
         ) : null}
-        {summary.validation_warnings.map((warning) => (
+        {summary.validation_warnings.filter(warning => !summary.is_mock || !warning.startsWith("MOCK/TEST OUTPUT:")).map((warning) => (
           <p key={warning} className="text-xs text-red-800">
             {warning}
           </p>
         ))}
         {CLAIM_SECTIONS.map(([label, read]) => {
           const claims = read(summary);
+          if (claims.length === 0) return null;
           return (
             <div key={label}>
               <h3 className="font-semibold">{label}</h3>
-              {claims.length === 0 ? (
-                <p className="text-muted">Not documented in this summary.</p>
-              ) : (
-                claims.map((claim) => (
+              {claims.map((claim) => (
                   <ClaimRow
                     key={`${label}-${claim.text}`}
                     claim={claim}
                     onCite={goToEvidence}
                   />
-                ))
-              )}
+                ))}
             </div>
           );
         })}
+        {CLAIM_SECTIONS.some(([, read]) => read(summary).length === 0) && <details className="undocumented-sections"><summary>Not documented in {CLAIM_SECTIONS.filter(([, read]) => read(summary).length === 0).length} sections</summary><ul>{CLAIM_SECTIONS.filter(([, read]) => read(summary).length === 0).map(([label]) => <li key={label}>{label}</li>)}</ul></details>}
         <div>
           <h3 className="font-semibold">Unresolved or unavailable</h3>
           <ul className="list-disc px-5">
@@ -79,20 +76,20 @@ export function SummaryReview({ summary, onOpenSource, recordLabel = "Synthetic 
           </ul>
         </div>
         {summary.summary.processing_limitations.length > 0 ? (
-          <div>
-            <h3 className="font-semibold">Processing limitations</h3>
+          <details className="processing-details">
+            <summary>Processing limitations</summary>
             <ul className="list-disc px-5">
               {summary.summary.processing_limitations.map((item) => (
                 <li key={item}>{item}</li>
               ))}
             </ul>
-          </div>
+          </details>
         ) : null}
-        <p className="text-xs text-muted">{summary.summary.disclaimer}</p>
+        <details className="processing-details"><summary>Research-use disclaimer</summary><p>{summary.summary.disclaimer}</p></details>
       </div>
-      <aside className="rounded border border-line bg-paper p-4 text-sm">
-        <h3 className="font-semibold">Evidence passages</h3>
-        <p className="mt-1 text-xs text-muted">
+      <aside className="evidence-pane">
+        <h2>Source evidence</h2>
+        <p className="evidence-help">
           Citation IDs mean a source was attached. They are not clinical proof.
           Click a citation to scroll here.
         </p>
@@ -108,9 +105,7 @@ export function SummaryReview({ summary, onOpenSource, recordLabel = "Synthetic 
                   id={evidenceAnchorId(passage.id)}
                   data-testid={`evidence-${passage.id}`}
                   data-active={selected ? "true" : "false"}
-                  className={`rounded border p-3 ${
-                    selected ? "border-accent bg-card" : "border-line bg-card"
-                  }`}
+                  className="evidence-passage"
                 >
                   <p className="text-xs font-semibold text-accent-dark">
                     {passage.original_filename} · page {passage.page} ·{" "}
@@ -118,7 +113,7 @@ export function SummaryReview({ summary, onOpenSource, recordLabel = "Synthetic 
                   </p>
                   <p className="mt-1 whitespace-pre-wrap">{passage.text}</p>
                   {onOpenSource && <button className="text-button source-button" onClick={() => onOpenSource(passage)}>Open source page</button>}
-                  <p className="mt-2 font-mono text-[11px] text-muted">{passage.id}</p>
+                  <details className="source-metadata"><summary>Source details</summary><p>{passage.id}</p><p>Extraction: {passage.method}</p></details>
                 </li>
               );
             })}
@@ -126,6 +121,7 @@ export function SummaryReview({ summary, onOpenSource, recordLabel = "Synthetic 
         )}
       </aside>
       </div>
+      <div className="summary-toolbar"><p>Export includes the summary, source passages, and generation details.</p><div className="export-actions"><button className="button small" onClick={() => exportSummary(summary, recordLabel, "txt")}>Export text</button><button className="button small" onClick={() => exportSummary(summary, recordLabel, "json")}>Export JSON</button></div></div>
     </div>
   );
 }
@@ -164,7 +160,8 @@ function ClaimRow({
               {index > 0 ? <span className="text-xs text-muted">, </span> : null}
               <button
                 type="button"
-                className="text-xs text-accent-dark underline"
+                className="citation-button"
+                title="Show this source passage"
                 onClick={() => onCite(sourceId)}
               >
                 {sourceId.slice(0, 8)}

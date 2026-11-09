@@ -163,6 +163,8 @@ Results go to `data/evaluation/results/` (gitignored). Mock runs set `reportable
 
 ## Documentation
 
+The redesigned app includes **Experiments** for importing measured Kaggle results. The handwriting experiment files and exact next steps are in [experiments/handwriting/README.md](experiments/handwriting/README.md). Import the prepared notebook into Kaggle; its GPU training has not been run yet. A measured local Tesseract validation baseline is included as aggregate JSON and can be imported into your account.
+
 | Document | Purpose |
 |----------|---------|
 | `docs/implementation-plan.md` | Segment map |

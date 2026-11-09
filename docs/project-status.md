@@ -1,6 +1,22 @@
 # Project Status — MediSummarize AI
 
-Last updated: 2026-11-09
+Last updated: 2026-11-10
+
+## 10 November 2026 handoff
+
+The frontend now uses the user-approved Clinical clarity design: teal navigation, Source Sans 3, a document strip, side-by-side summary/source panes, and a dedicated Experiments page. The user approved the original B layout and explicitly switched to a code-led build with the image as a visual guide. Experiment JSON import, model/split filters, run metadata, and planned-model states are implemented. Backend experiment imports are authenticated, owner-scoped, size-limited, and labeled as user-supplied measurements. Mock output cannot be imported as a real OCR run.
+
+Actual RxHandBD v3 data was downloaded, checksum-verified, and audited: 5,578 readable 512×512 crops, complete labels, no exact image duplicates, eight perceptual-similarity flags for review. The deterministic split is 4,017 training / 446 validation / 1,115 official test. No writer metadata is supplied, so writer independence is unverified. The literal archive has 1,787 distinct label strings, differing from the publisher's described vocabulary size.
+
+An actual Tesseract 5.3 validation run on the 446 crops measured CER 0.78659, WER 1.11310 and exact match 0.01121. These weak validation results are not final test scores or whole-page OCR performance. Aggregate results are in `experiments/handwriting/local-baseline-results.json`. The Kaggle notebook contains pretrained TrOCR comparison, three-epoch fine-tuning, validation checkpoint selection, final held-out testing, and aggregate export. **TrOCR has not been GPU-run or integrated into the app.**
+
+Browser checks now cover login, record/summary loading, citation selection, full-source navigation, result-file chooser/import, and the empty final-test filter. Captures cover a desktop layout, the actual IAB width, and a 390px phone-width iframe. The native IAB viewport override did not resize its visible surface; phone evidence uses a real narrow iframe and viewport captures, rather than a claim of a native device test. Patient-document file upload/download still needs the full defense walkthrough; results import was driven through the browser picker.
+
+A discovered automatic/manual extraction race is fixed with a per-record reentrant lock for this single-process prototype. This lock is not distributed; multi-worker deployment needs database/job coordination. It also rolls failed extraction transactions back before recording errors.
+
+File-based SQLite now uses separate pooled connections rather than a global StaticPool connection; in-memory test databases retain sharing. Sixty parallel authenticated record/document/summary requests returned 200 after this correction. Final validation: **65 backend tests, 13 frontend tests and 3 handwriting metric tests pass**; frontend typecheck and production build pass; notebook JSON/Python cell syntax checked. GPU notebook execution is still pending. The frontend finish review accepted the visual direction and its scoped follow-up scored both requested fixes resolved: persisted design choice and reduced-motion source navigation. Design tokens are documented in `DESIGN.md` and `.impeccable/design.json`.
+
+Next: review 50 training labels and eight similarity flags, run the Kaggle notebook, return the measured outputs, then update report results with real evidence. Real summarization quality, neural retrieval, whole-page handwriting recognition, supervisor approval and signatures remain outstanding. The older handoffs below are historical and their test counts are superseded by this session's validation report.
 
 ## 9 November 2026 handoff
 

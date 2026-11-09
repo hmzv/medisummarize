@@ -6,6 +6,7 @@ import { RecordDetailPage } from "./pages/RecordDetailPage";
 import { RecordsPage } from "./pages/RecordsPage";
 import { RegisterPage } from "./pages/RegisterPage";
 import { GuidePage, SystemPage } from "./pages/GuidePage";
+import { ExperimentsPage } from "./pages/ExperimentsPage";
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
             <Route path="/records/:recordId" element={<RecordDetailPage />} />
             <Route path="/guide" element={<GuidePage />} />
             <Route path="/system" element={<SystemPage />} />
+            <Route path="/experiments" element={<ExperimentsPage />} />
           </Route>
           <Route path="*" element={<Navigate to="/records" replace />} />
         </Routes>

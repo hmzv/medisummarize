@@ -61,3 +61,12 @@ Retrieval is limited to the authorized record. Citation IDs mean a source was at
 | GET | `/api/v1/records/{record_id}/summary` | Latest summary or `404` |
 
 `SummaryResponse.evidence` is a list of `{id, document_id, original_filename, page, method, text}`. `is_mock` is true when the generation provider is the labeled mock.
+
+## Experiment results
+
+| Method | Path | Notes |
+|--------|------|-------|
+| GET | `/api/v1/experiments` | Authenticated owner's imported runs |
+| POST | `/api/v1/experiments/import` | Schema-version 1 aggregate JSON; up to 20 runs and 1 MB |
+
+The request wrapper is `{ "schema_version": 1, "runs": [...] }`. Use the handwriting notebook export or `experiments/handwriting/local-baseline-results.json`. Each run identifies task `handwriting_word_ocr`, model, dataset and SHA-256, validation/test split, sample count, metrics, timestamp, duration, provenance and limitations. `is_mock` must be false; sample counts must agree; non-finite metrics are rejected. CER/WER may exceed 1. Imported values are user-supplied, not independently verified. Content-based IDs prevent duplicate imports in the same workspace. Files are stored under the owner's UUID inside `STORAGE_DIR/experiments/` and are never served directly.

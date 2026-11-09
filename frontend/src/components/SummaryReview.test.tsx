@@ -41,7 +41,9 @@ const summary: SummaryResponse = {
 };
 
 describe("SummaryReview", () => {
-  it("scrolls to the cited passage when a citation is clicked", () => {
+  afterEach(() => { vi.restoreAllMocks(); vi.unstubAllGlobals(); });
+  it.each([[false, "smooth"], [true, "auto"]] as const)("scrolls to the cited passage with reduced motion %s", (reducedMotion, behavior) => {
+    vi.stubGlobal("matchMedia", vi.fn(() => ({matches: reducedMotion})));
     const onOpenSource = vi.fn();
     const scroll = vi.fn();
     const original = window.document.getElementById.bind(window.document);
@@ -57,7 +59,7 @@ describe("SummaryReview", () => {
     fireEvent.click(screen.getByRole("button", { name: "chunk-ab" }));
 
     expect(screen.getByTestId("evidence-chunk-abc-1")).toHaveAttribute("data-active", "true");
-    expect(scroll).toHaveBeenCalled();
+    expect(scroll).toHaveBeenCalledWith({behavior, block:"center"});
     expect(onOpenSource).not.toHaveBeenCalled();
     fireEvent.click(screen.getByRole("button", { name: "Open source page" }));
     expect(onOpenSource).toHaveBeenCalledWith(summary.evidence[0]);

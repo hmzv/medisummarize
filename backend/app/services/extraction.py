@@ -17,6 +17,7 @@ from app.models.extracted_page import ExtractedPage
 from app.schemas.extraction import ExtractedPageListResponse, ExtractedPageResponse
 from app.services.ingestion.storage import document_path
 from app.services.ocr.engine import ocr_image, ocr_png_bytes
+from app.services.record_lock import record_write_lock
 
 MIN_PDF_TEXT_CHARS = 40
 
@@ -31,6 +32,15 @@ class PageExtraction:
 
 
 def extract_document(db: Session, document_id: uuid.UUID) -> ExtractedPageListResponse:
+    document = db.get(Document, document_id)
+    if document is None:
+        raise AppError(status_code=404, detail="Document not found.")
+    with record_write_lock(document.record_id):
+        db.expire_all()
+        return _extract_document(db, document_id)
+
+
+def _extract_document(db: Session, document_id: uuid.UUID) -> ExtractedPageListResponse:
     document = db.get(Document, document_id)
     if document is None or document.status == DocumentStatus.deleted.value:
         raise AppError(status_code=404, detail="Document not found.")
@@ -54,11 +64,19 @@ def extract_document(db: Session, document_id: uuid.UUID) -> ExtractedPageListRe
             index_owned_record(db, document.owner_id, document.record_id)
             db.refresh(document)
     except AppError as exc:
+        db.rollback()
+        document = db.get(Document, document_id)
+        if document is None:
+            raise
         document.status = DocumentStatus.failed.value
         document.public_error = exc.detail
         db.commit()
         raise
     except Exception:
+        db.rollback()
+        document = db.get(Document, document_id)
+        if document is None:
+            raise AppError(status_code=404, detail="Document not found.") from None
         document.status = DocumentStatus.failed.value
         document.public_error = "Extraction failed."
         db.commit()

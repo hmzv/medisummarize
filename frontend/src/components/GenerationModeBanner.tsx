@@ -40,12 +40,12 @@ export function GenerationModeBanner({
       <div
         role="status"
         data-testid="generation-mode-banner"
-        className="border-b border-red-800 bg-red-50 px-4 py-2 text-sm text-red-800"
+        className="mode-banner"
       >
-        <p className="mx-auto max-w-5xl font-medium">
+        <details><summary>Mock generation · Verify output against sources</summary><p>
           MOCK/TEST OUTPUT is enabled ({health.provider}). Generated text is not a
           real-model result and must not be used in evaluation metrics.
-        </p>
+        </p></details>
       </div>
     );
   }
@@ -54,7 +54,7 @@ export function GenerationModeBanner({
     <div
       role="status"
       data-testid="generation-mode-banner"
-      className="border-b border-line bg-paper px-4 py-2 text-sm text-muted"
+      className="mode-banner"
     >
       <p className="mx-auto max-w-5xl">
         Generation provider: {health.provider}

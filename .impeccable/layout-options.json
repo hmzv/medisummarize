@@ -1,0 +1,58 @@
+{
+  "title": "B · Clinical clarity: choose the working layout",
+  "question": "The teal design is fixed. Keep the original side-by-side layout, or choose one of these two structural alternatives.",
+  "options": [
+    {
+      "id": "layout-original",
+      "label": "1 · Original split review",
+      "thesis": "Horizontal document strip, equal summary and source panes.",
+      "palette": [
+        "#123f46",
+        "#eaf2f2",
+        "#18877c"
+      ],
+      "materials": [
+        "Teal rail",
+        "White reading panes"
+      ],
+      "viewport": "The B mockup you chose, with experiments below.",
+      "risk": "Document list becomes a horizontal strip as it grows.",
+      "comp": ".impeccable/mocks/layout-original.png"
+    },
+    {
+      "id": "layout-review",
+      "label": "2 · Wide evidence review",
+      "thesis": "Top navigation frees space for a document index and two reading panes.",
+      "palette": [
+        "#123f46",
+        "#eaf2f2",
+        "#18877c"
+      ],
+      "materials": [
+        "Teal top bar",
+        "White reading panes"
+      ],
+      "viewport": "Document index, summary, and source remain visible together.",
+      "risk": "Three columns need stacking on smaller screens.",
+      "comp": ".impeccable/mocks/layout-review.png"
+    },
+    {
+      "id": "layout-workflow",
+      "label": "3 · Guided review",
+      "thesis": "A visible three-stage workflow with source checking beside a wider summary.",
+      "palette": [
+        "#123f46",
+        "#eaf2f2",
+        "#18877c"
+      ],
+      "materials": [
+        "Teal rail",
+        "White reading panes"
+      ],
+      "viewport": "Upload, check text, review summary; source area left and draft right.",
+      "risk": "Workflow guidance takes more vertical space.",
+      "comp": ".impeccable/mocks/layout-workflow.png"
+    }
+  ],
+  "steer": true
+}

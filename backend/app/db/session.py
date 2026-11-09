@@ -3,6 +3,7 @@
 from collections.abc import Callable
 
 from sqlalchemy import Engine, create_engine, event
+from sqlalchemy.engine import make_url
 from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.pool import StaticPool
 
@@ -21,12 +22,14 @@ def _enable_sqlite_foreign_keys(engine: Engine) -> None:
 
 
 def create_engine_from_url(url: str) -> Engine:
-    """Create an engine. SQLite uses a static pool so in-memory DBs are shared."""
+    """Share memory databases, but give file databases separate pooled connections."""
     if url.startswith("sqlite"):
+        database = make_url(url).database
+        memory_database = not database or database == ":memory:" or make_url(url).query.get("mode") == "memory"
         engine = create_engine(
             url,
             connect_args={"check_same_thread": False},
-            poolclass=StaticPool,
+            **({"poolclass": StaticPool} if memory_database else {}),
         )
         _enable_sqlite_foreign_keys(engine)
         return engine

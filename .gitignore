@@ -54,3 +54,9 @@ Thumbs.db
 
 # Local artifact build tools and previews
 tmp/
+
+# Local design-tool caches, captures, and approval sessions
+.impeccable/build/
+.impeccable/review/
+.impeccable/questions/
+frontend/public/__review-mobile.html

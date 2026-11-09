@@ -1,0 +1,64 @@
+{
+  "title": "Choose your MediSummarize workspace",
+  "question": "Compare the image mockups. Choose a direction, or add a short steer for changes. All records shown are synthetic and experiment scores are unrun.",
+  "options": [
+    {
+      "id": "assigned",
+      "label": "A · Evidence journal",
+      "kicker": "THE ROLL",
+      "lineage": "Clinical research publication typography",
+      "thesis": "A precise plum workspace that keeps every summary beside its evidence.",
+      "palette": ["#392c4e", "#ede8f2", "#fcfbfd", "#75558f"],
+      "materials": ["flat lilac shell", "white reading panes", "fine source rules"],
+      "viewport": "Sidebar, record header, document list, and linked summary/source panes; experiment runs below.",
+      "risk": "More editorial character; dense evidence needs careful type sizing.",
+      "raised": [
+        {"from": "Crouwel grid", "raise": "Shared pane alignment makes source comparison easier."},
+        {"from": "Boarding pass", "raise": "Processing updates preserve row identity."},
+        {"from": "Monochrome proof", "raise": "Every summary claim has an adjacent source action."},
+        {"from": "Transit diagram", "raise": "Selected source markers stay unmistakable."},
+        {"from": "Split-flap board", "raise": "Statuses align in compact, readable columns."}
+      ],
+      "comp": ".impeccable/mocks/decision/evidence-journal.png"
+    },
+    {
+      "id": "model-pick",
+      "label": "B · Clinical clarity",
+      "kicker": "IMPECCABLE’S PICK",
+      "lineage": "Clinical conference graphic identity",
+      "thesis": "A calm teal workspace with a clear document-to-evidence path.",
+      "palette": ["#123f46", "#eaf2f2", "#ffffff", "#18877c"],
+      "materials": ["teal navigation", "cool white panels", "precise source markers"],
+      "viewport": "A compact sidebar, document strip, wide evidence review, and separate experiment navigation.",
+      "risk": "The most familiar option; resembles established healthcare software.",
+      "comp": ".impeccable/mocks/decision/clinical-clarity.png"
+    },
+    {
+      "id": "challenger-reference",
+      "label": "C · Reference desk",
+      "verdict": "competitive",
+      "lineage": "Annotated reference typography",
+      "thesis": "An ivory reading workspace with strong ink text and vermilion source anchors.",
+      "palette": ["#24231f", "#f3f0e7", "#fffefa", "#af4435"],
+      "materials": ["flat ivory ground", "one-pixel rules", "serif evidence text"],
+      "viewport": "Standard top navigation, document list, and two readable evidence columns with citation markers.",
+      "case": "Strong fit for academic source review; less immediately familiar as clinical software.",
+      "risk": "Reading-oriented typography can feel less like a modern clinical app.",
+      "comp": ".impeccable/mocks/decision/reference-desk.png",
+      "board": "https://impeccable.style/worlds/cards/rw-centre-rail-reference-setting.webp",
+      "hero": "https://impeccable.style/worlds/cards/rw-centre-rail-reference-setting-hero.webp"
+    }
+  ],
+  "reroll": {"registers": ["safer", "bolder"]},
+  "buildPath": {"value": "comp", "toggle": true},
+  "canon": true,
+  "canonCard": {
+    "label": "Conventional product UI",
+    "thesis": "A familiar blue-and-white application, executed carefully.",
+    "palette": ["#ffffff", "#18233a", "#2563eb"],
+    "materials": ["white panels", "neutral dividers"],
+    "viewport": "Standard sidebar, record tabs, document table, and source review panels.",
+    "risk": "Clear and familiar, with less distinctive character."
+  },
+  "steer": true
+}

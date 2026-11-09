@@ -1,0 +1,396 @@
+{
+  "regions": [
+    {
+      "id": "sidebar",
+      "kind": "chrome",
+      "pixelBox": {
+        "x": 0,
+        "y": 0,
+        "w": 269,
+        "h": 1058
+      },
+      "note": "Deep teal navigation rail, flat colour",
+      "container": true
+    },
+    {
+      "id": "brand",
+      "kind": "text",
+      "pixelBox": {
+        "x": 26,
+        "y": 21,
+        "w": 222,
+        "h": 35
+      },
+      "note": "MediSummarize AI brand and small authored mark"
+    },
+    {
+      "id": "nav-records",
+      "kind": "control",
+      "pixelBox": {
+        "x": 10,
+        "y": 96,
+        "w": 247,
+        "h": 50
+      },
+      "note": "Records selected navigation item"
+    },
+    {
+      "id": "nav-experiments",
+      "kind": "control",
+      "pixelBox": {
+        "x": 26,
+        "y": 155,
+        "w": 182,
+        "h": 38
+      },
+      "note": "Experiments navigation item"
+    },
+    {
+      "id": "nav-guide",
+      "kind": "control",
+      "pixelBox": {
+        "x": 26,
+        "y": 208,
+        "w": 181,
+        "h": 38
+      },
+      "note": "Demo guide navigation item"
+    },
+    {
+      "id": "nav-system",
+      "kind": "control",
+      "pixelBox": {
+        "x": 26,
+        "y": 258,
+        "w": 180,
+        "h": 39
+      },
+      "note": "System navigation item"
+    },
+    {
+      "id": "topbar",
+      "kind": "chrome",
+      "pixelBox": {
+        "x": 269,
+        "y": 0,
+        "w": 1218,
+        "h": 62
+      },
+      "note": "White top navigation strip and bottom rule",
+      "container": true
+    },
+    {
+      "id": "breadcrumb",
+      "kind": "text",
+      "pixelBox": {
+        "x": 300,
+        "y": 18,
+        "w": 213,
+        "h": 28
+      },
+      "note": "Records then DEMO-001 breadcrumb"
+    },
+    {
+      "id": "account",
+      "kind": "control",
+      "pixelBox": {
+        "x": 1270,
+        "y": 12,
+        "w": 195,
+        "h": 37
+      },
+      "note": "Research user account control"
+    },
+    {
+      "id": "title",
+      "kind": "text",
+      "pixelBox": {
+        "x": 298,
+        "y": 92,
+        "w": 310,
+        "h": 35
+      },
+      "note": "Review the record bold sans heading"
+    },
+    {
+      "id": "record-label",
+      "kind": "text",
+      "pixelBox": {
+        "x": 298,
+        "y": 143,
+        "w": 111,
+        "h": 27
+      },
+      "note": "DEMO-001 record label"
+    },
+    {
+      "id": "synthetic-tag",
+      "kind": "control",
+      "pixelBox": {
+        "x": 449,
+        "y": 139,
+        "w": 152,
+        "h": 33
+      },
+      "note": "Synthetic demo badge"
+    },
+    {
+      "id": "upload",
+      "kind": "control",
+      "pixelBox": {
+        "x": 756,
+        "y": 102,
+        "w": 248,
+        "h": 52
+      },
+      "note": "Upload documents primary action"
+    },
+    {
+      "id": "mock-notice",
+      "kind": "text",
+      "pixelBox": {
+        "x": 1037,
+        "y": 110,
+        "w": 420,
+        "h": 30
+      },
+      "note": "Mock generation notice with source verification advice"
+    },
+    {
+      "id": "tabs",
+      "kind": "control",
+      "pixelBox": {
+        "x": 298,
+        "y": 200,
+        "w": 1168,
+        "h": 44
+      },
+      "note": "Documents and Summary & evidence tabs with active underline"
+    },
+    {
+      "id": "document-one",
+      "kind": "control",
+      "pixelBox": {
+        "x": 293,
+        "y": 274,
+        "w": 574,
+        "h": 62
+      },
+      "note": "discharge-note.pdf Extracted 2 pages source selector"
+    },
+    {
+      "id": "document-two",
+      "kind": "control",
+      "pixelBox": {
+        "x": 880,
+        "y": 274,
+        "w": 588,
+        "h": 64
+      },
+      "note": "prescription.png Needs review 1 page source selector"
+    },
+    {
+      "id": "summary-pane",
+      "kind": "chrome",
+      "pixelBox": {
+        "x": 293,
+        "y": 374,
+        "w": 584,
+        "h": 307
+      },
+      "note": "White bordered draft summary reading pane",
+      "container": true
+    },
+    {
+      "id": "summary-title",
+      "kind": "text",
+      "pixelBox": {
+        "x": 315,
+        "y": 398,
+        "w": 218,
+        "h": 31
+      },
+      "note": "Draft summary heading"
+    },
+    {
+      "id": "mock-badge",
+      "kind": "control",
+      "pixelBox": {
+        "x": 561,
+        "y": 398,
+        "w": 128,
+        "h": 33
+      },
+      "note": "Mock output badge"
+    },
+    {
+      "id": "summary-body",
+      "kind": "text",
+      "pixelBox": {
+        "x": 315,
+        "y": 462,
+        "w": 544,
+        "h": 64
+      },
+      "note": "Two-line synthetic fever summary and citation"
+    },
+    {
+      "id": "evidence-pane",
+      "kind": "chrome",
+      "pixelBox": {
+        "x": 891,
+        "y": 374,
+        "w": 575,
+        "h": 307
+      },
+      "note": "White bordered source evidence reading pane",
+      "container": true
+    },
+    {
+      "id": "evidence-title",
+      "kind": "text",
+      "pixelBox": {
+        "x": 915,
+        "y": 400,
+        "w": 255,
+        "h": 32
+      },
+      "note": "Source evidence heading"
+    },
+    {
+      "id": "open-source",
+      "kind": "control",
+      "pixelBox": {
+        "x": 1242,
+        "y": 408,
+        "w": 209,
+        "h": 44
+      },
+      "note": "Open source page outlined action"
+    },
+    {
+      "id": "source-file",
+      "kind": "text",
+      "pixelBox": {
+        "x": 916,
+        "y": 444,
+        "w": 321,
+        "h": 24
+      },
+      "note": "discharge-note.pdf Page 1 source identification"
+    },
+    {
+      "id": "source-box",
+      "kind": "chrome",
+      "pixelBox": {
+        "x": 911,
+        "y": 489,
+        "w": 543,
+        "h": 161
+      },
+      "note": "White excerpt box with fine cool border",
+      "container": true
+    },
+    {
+      "id": "source-body",
+      "kind": "text",
+      "pixelBox": {
+        "x": 928,
+        "y": 504,
+        "w": 513,
+        "h": 107
+      },
+      "note": "SYNTHETIC EXAMPLE and highlighted fever source paragraph"
+    },
+    {
+      "id": "experiments-panel",
+      "kind": "chrome",
+      "pixelBox": {
+        "x": 291,
+        "y": 708,
+        "w": 1177,
+        "h": 310
+      },
+      "note": "Mist experiment preview background",
+      "container": true
+    },
+    {
+      "id": "experiments-title",
+      "kind": "text",
+      "pixelBox": {
+        "x": 313,
+        "y": 725,
+        "w": 222,
+        "h": 30
+      },
+      "note": "Experiment runs heading"
+    },
+    {
+      "id": "experiments-link",
+      "kind": "control",
+      "pixelBox": {
+        "x": 1270,
+        "y": 724,
+        "w": 181,
+        "h": 30
+      },
+      "note": "View experiments link"
+    },
+    {
+      "id": "experiments-caption",
+      "kind": "text",
+      "pixelBox": {
+        "x": 314,
+        "y": 760,
+        "w": 610,
+        "h": 23
+      },
+      "note": "Training runs in Kaggle caption"
+    },
+    {
+      "id": "table-head",
+      "kind": "chrome",
+      "pixelBox": {
+        "x": 303,
+        "y": 800,
+        "w": 1151,
+        "h": 46
+      },
+      "note": "Model Dataset Status CER table header"
+    },
+    {
+      "id": "table-row-one",
+      "kind": "text",
+      "pixelBox": {
+        "x": 316,
+        "y": 858,
+        "w": 1010,
+        "h": 27
+      },
+      "note": "Tesseract RxHandBD v3 Not run and no score"
+    },
+    {
+      "id": "table-row-two",
+      "kind": "text",
+      "pixelBox": {
+        "x": 316,
+        "y": 907,
+        "w": 1010,
+        "h": 27
+      },
+      "note": "Pretrained TrOCR-small RxHandBD v3 Not run and no score"
+    },
+    {
+      "id": "table-row-three",
+      "kind": "text",
+      "pixelBox": {
+        "x": 316,
+        "y": 957,
+        "w": 1010,
+        "h": 27
+      },
+      "note": "Fine-tuned TrOCR-small RxHandBD v3 Not run and no score"
+    }
+  ],
+  "allowUncovered": true
+}

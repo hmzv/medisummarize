@@ -4,6 +4,8 @@ import { ApiError, deleteDocument, deleteRecord, downloadDocument, extractDocume
 import { PrototypeShell } from "../components/PrototypeShell";
 import { Icon } from "../components/Icon";
 import { extractedPageAnchorId, SummaryReview } from "../components/SummaryReview";
+import { ExperimentPreview } from "../components/ExperimentResults";
+import { scrollToSource } from "../utils/sourceNavigation";
 
 export function RecordDetailPage() {
   const { recordId } = useParams();
@@ -80,14 +82,14 @@ export function RecordDetailPage() {
       setActivePage(extractedPageAnchorId(passage.document_id, passage.page)); setTab("documents");
     });
   }
-  useEffect(() => { if (activePage && tab === "documents") document.getElementById(activePage)?.scrollIntoView({ behavior: "smooth", block: "center" }); }, [activePage, extracted, tab]);
+  useEffect(() => { if (activePage && tab === "documents") scrollToSource(activePage); }, [activePage, extracted, tab]);
   const processed = documents.filter(d => ["extracted", "indexed", "ready"].includes(d.status)).length;
   return <PrototypeShell><main className="workspace record-detail">
     <Link to="/records" className="text-link back-link">All records</Link>
     {error && <p className="error-message" role="alert">{error}</p>}
     {!record ? <p role="status">{error ? "This record is unavailable." : "Loading record…"}</p> : <>
-      <div className="page-heading"><div><h1>{record.display_label}</h1><p>Synthetic patient record <span className="separator">·</span> Created {new Date(record.created_at).toLocaleDateString("en-GB", {day:"numeric",month:"short",year:"numeric"})}</p></div><button className="button primary" disabled={pending || !processed} onClick={() => void act("Generating summary", async () => { setSummary(await generateSummary(record.id)); setTab("summary"); })}><Icon name="activity" />{busy === "Generating summary" ? "Generating…" : summary ? "Regenerate summary" : "Generate summary"}</button></div>
-      <ol className="workflow-steps" aria-label="Review workflow"><li data-complete={documents.length > 0}><span>1</span>Add documents <small>{documents.length} uploaded</small></li><li data-complete={processed > 0}><span>2</span>Review extracted text <small>{processed} ready</small></li><li data-complete={!!summary}><span>3</span>Verify summary <small>{summary ? "Ready for review" : "Awaiting generation"}</small></li></ol>
+      <div className="page-heading"><div><h1>Review the record</h1><p className="record-caption"><strong>{record.display_label}</strong><span className="status-label synthetic">Synthetic demo</span></p></div><div className="record-primary-actions"><button className="button primary" disabled={pending} onClick={() => { setTab("documents"); window.setTimeout(() => input.current?.focus(), 0); }}><Icon name="upload" />Upload documents</button><button className="button" disabled={pending || !processed} onClick={() => void act("Generating summary", async () => { setSummary(await generateSummary(record.id)); setTab("summary"); })}><Icon name="activity" />{busy === "Generating summary" ? "Generating…" : summary ? "Regenerate summary" : "Generate summary"}</button></div></div>
+      {tab === "documents" && <ol className="workflow-steps" aria-label="Review workflow"><li data-complete={documents.length > 0}><span>1</span>Add documents <small>{documents.length} uploaded</small></li><li data-complete={processed > 0}><span>2</span>Review extracted text <small>{processed} ready</small></li><li data-complete={!!summary}><span>3</span>Verify summary <small>{summary ? "Ready for review" : "Awaiting generation"}</small></li></ol>}
       {!processed && documents.length > 0 && <p className="notice">Extract text from at least one document to enable summary generation.</p>}
       {busy && <p className="working-status" role="status"><span className="busy-dot" />{busy}… {busy === "Generating summary" && "This may take up to two minutes."}</p>}
       {notice && <p className="notice" role="status">{notice}</p>}
@@ -105,7 +107,11 @@ export function RecordDetailPage() {
           {extracted[doc.id] && <div className="extracted-text">{!extracted[doc.id].items.length && <p>No text available. Try extracting again or use a clearer source.</p>}{extracted[doc.id].items.map(page => <div key={page.id} id={extractedPageAnchorId(doc.id, page.page_number)} className={activePage === extractedPageAnchorId(doc.id, page.page_number) ? "source-page active-page" : "source-page"}><h4>Page {page.page_number}<span>{page.extraction_method}{page.ocr_confidence !== null ? ` · OCR confidence ${page.ocr_confidence.toFixed(0)}` : ""}</span></h4>{page.warnings.map(w => <p className="notice" key={w}>{w}</p>)}<pre>{page.text || "No text on this page."}</pre></div>)}</div>}
         </li>)}</ul>}
       </section>
-      <section role="tabpanel" id="panel-summary" aria-labelledby="tab-summary" hidden={tab !== "summary"}>{summary ? <SummaryReview key={summary.id} summary={summary} recordLabel={record.display_label} onOpenSource={p => void openSource(p)} /> : <div className="empty-state"><Icon name="activity" size={36} /><h2>Your summary will appear here</h2><p>Add documents and review their text, then choose Generate summary.</p></div>}</section>
+      <section role="tabpanel" id="panel-summary" aria-labelledby="tab-summary" hidden={tab !== "summary"}>
+        {!!documents.length && <div className="document-strip" aria-label="Source documents">{documents.map(doc => <button className="document-selector" key={doc.id} onClick={() => void openSource({id: doc.id, document_id: doc.id, original_filename: doc.original_filename, page: 1, method: "source", text: ""})}><Icon name="file" size={23} /><strong>{doc.original_filename}</strong><span className={`status-label ${["extracted", "indexed", "ready"].includes(doc.status) ? "ready" : ""}`}>{["extracted", "indexed", "ready"].includes(doc.status) ? "Extracted" : "Needs review"}</span>{doc.page_count && <small>{doc.page_count} page{doc.page_count === 1 ? "" : "s"}</small>}</button>)}</div>}
+        {summary ? <SummaryReview key={summary.id} summary={summary} recordLabel={record.display_label} onOpenSource={p => void openSource(p)} /> : <div className="empty-state"><Icon name="activity" size={36} /><h2>Your summary will appear here</h2><p>Add documents and review their text, then choose Generate summary.</p></div>}
+        {tab === "summary" && <ExperimentPreview />}
+      </section>
       <details className="record-management"><summary>Record management</summary><p>Deleting this record permanently removes its source documents and generated summaries.</p><button className="button danger" disabled={pending} onClick={() => { if (window.confirm("Permanently delete this fictional record and all its files?")) void act("Deleting record", async () => { await deleteRecord(record.id); navigate("/records"); }); }}>Delete record</button></details>
     </>}
   </main></PrototypeShell>;

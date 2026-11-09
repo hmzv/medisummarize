@@ -8,6 +8,8 @@ const paths: Record<string, string> = {
   check: "M5 12l4 4L19 6",
   book: "M12 5c-3-2-7-2-10 0v15c3-2 7-2 10 0 3-2 7-2 10 0V5c-3-2-7-2-10 0z M12 5v15",
   activity: "M2 12h5l3-8 4 16 3-8h5",
+  experiments: "M9 3h6 M10 3v6L4 19a1 1 0 0 0 1 2h14a1 1 0 0 0 1-2L14 9V3 M8 14h8",
+  user: "M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0 M4 21v-3a8 8 0 0 1 16 0v3",
   logout: "M9 4H3v16h6 M9 12h12 M17 8l4 4-4 4",
   download: "M12 3v13 M7 11l5 5 5-5 M4 17v4h16v-4",
 };
