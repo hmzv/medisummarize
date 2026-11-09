@@ -56,8 +56,10 @@ describe("SummaryReview", () => {
     render(<SummaryReview summary={summary} onOpenSource={onOpenSource} />);
     fireEvent.click(screen.getByRole("button", { name: "chunk-ab" }));
 
-    expect(onOpenSource).toHaveBeenCalledWith(summary.evidence[0]);
     expect(screen.getByTestId("evidence-chunk-abc-1")).toHaveAttribute("data-active", "true");
     expect(scroll).toHaveBeenCalled();
+    expect(onOpenSource).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole("button", { name: "Open source page" }));
+    expect(onOpenSource).toHaveBeenCalledWith(summary.evidence[0]);
   });
 });

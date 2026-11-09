@@ -69,3 +69,34 @@ def test_summary_rejects_cross_user_access(client: TestClient, register_user) ->
     record_id = _create_record(client, alice)
     bob_get = client.get(f"/api/v1/records/{record_id}/summary", headers=_auth(bob))
     assert bob_get.status_code == 404
+
+def test_document_changes_invalidate_summary(client: TestClient, register_user) -> None:
+    user = register_user("summary-lifecycle@example.com")
+    record_id = _create_record(client, user)
+    doc = _upload(client, user, record_id, "first.txt", b"SYNTHETIC. Denied chest pain.")
+    _extract(client, user, record_id, doc["id"])
+    url = f"/api/v1/records/{record_id}/summary"
+    assert client.post(url, headers=_auth(user)).status_code == 201
+    second = _upload(client, user, record_id, "second.txt", b"SYNTHETIC. Additional note.")
+    _extract(client, user, record_id, second["id"])
+    assert client.get(url, headers=_auth(user)).status_code == 404
+    assert client.post(url, headers=_auth(user)).status_code == 201
+    _extract(client, user, record_id, doc["id"])
+    assert client.get(url, headers=_auth(user)).status_code == 404
+    assert client.post(url, headers=_auth(user)).status_code == 201
+    assert client.delete(f"/api/v1/records/{record_id}/documents/{doc['id']}", headers=_auth(user)).status_code == 204
+    assert client.get(url, headers=_auth(user)).status_code == 404
+    from sqlalchemy import select
+    from app.db.session import get_session_factory
+    from app.models.extracted_page import ExtractedPage
+    from app.models.chunk import Chunk
+    import uuid
+    with get_session_factory()() as db:
+        assert not db.scalars(select(ExtractedPage).where(ExtractedPage.document_id == uuid.UUID(doc["id"]))).all()
+        assert not db.scalars(select(Chunk).where(Chunk.document_id == uuid.UUID(doc["id"]))).all()
+        remaining = db.scalars(select(Chunk).where(Chunk.record_id == uuid.UUID(record_id))).all()
+        from app.core.config import get_settings
+        import json
+        metadata = json.loads((get_settings().resolved_index_dir / record_id / "meta.json").read_text())
+        assert set(metadata["chunk_ids"]) == {str(c.id) for c in remaining}
+        assert all(str(c.document_id) == second["id"] for c in remaining)

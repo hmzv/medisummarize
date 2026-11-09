@@ -1,0 +1,85 @@
+{
+  "nodes": {
+    "a": [
+      "Upload sources",
+      [
+        50,
+        70,
+        500,
+        270
+      ]
+    ],
+    "b": [
+      "Extract / OCR\nPreserve page provenance",
+      [
+        625,
+        70,
+        1075,
+        270
+      ]
+    ],
+    "c": [
+      "Chunk and index\nOwned record only",
+      [
+        1200,
+        70,
+        1650,
+        270
+      ]
+    ],
+    "d": [
+      "Retrieve section passages",
+      [
+        1200,
+        510,
+        1650,
+        710
+      ]
+    ],
+    "e": [
+      "Generate and validate JSON\nMock by default",
+      [
+        625,
+        510,
+        1075,
+        710
+      ]
+    ],
+    "f": [
+      "Reviewer checks citations\nExport research output",
+      [
+        50,
+        510,
+        500,
+        710
+      ]
+    ]
+  },
+  "edges": [
+    [
+      "a",
+      "b",
+      ""
+    ],
+    [
+      "b",
+      "c",
+      ""
+    ],
+    [
+      "c",
+      "d",
+      ""
+    ],
+    [
+      "d",
+      "e",
+      ""
+    ],
+    [
+      "e",
+      "f",
+      ""
+    ]
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "nodes": {
+    "a": [
+      "Reviewer\nupload / review request",
+      [
+        40,
+        60,
+        480,
+        270
+      ]
+    ],
+    "b": [
+      "P1 Validate and store\nD1 originals + metadata",
+      [
+        630,
+        60,
+        1070,
+        270
+      ]
+    ],
+    "c": [
+      "P2 Extract and chunk\nD2 page and chunk rows",
+      [
+        1220,
+        60,
+        1660,
+        270
+      ]
+    ],
+    "d": [
+      "P3 Embed and retrieve\nD3 record vectors",
+      [
+        1220,
+        560,
+        1660,
+        780
+      ]
+    ],
+    "e": [
+      "P4 Generate and validate\nD4 summary snapshot",
+      [
+        630,
+        560,
+        1070,
+        780
+      ]
+    ],
+    "f": [
+      "Reviewer\nclaim and source review",
+      [
+        40,
+        560,
+        480,
+        780
+      ]
+    ]
+  },
+  "edges": [
+    [
+      "a",
+      "b",
+      "files"
+    ],
+    [
+      "b",
+      "c",
+      "validated bytes"
+    ],
+    [
+      "c",
+      "d",
+      "text chunks"
+    ],
+    [
+      "d",
+      "e",
+      "passages"
+    ],
+    [
+      "e",
+      "f",
+      "summary + evidence"
+    ]
+  ]
+}

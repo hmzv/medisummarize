@@ -1,0 +1,85 @@
+{
+  "nodes": {
+    "u": [
+      "users\nPK id\nemail UNIQUE / password_hash",
+      [
+        40,
+        50,
+        500,
+        300
+      ]
+    ],
+    "r": [
+      "patient_records\nPK id / FK owner_id\ndisplay_label",
+      [
+        620,
+        50,
+        1080,
+        300
+      ]
+    ],
+    "s": [
+      "summaries\nPK id / FK owner_id, record_id\nsummary_json / evidence_json\nprovider / model / is_mock",
+      [
+        1200,
+        50,
+        1660,
+        300
+      ]
+    ],
+    "d": [
+      "documents\nPK id / FK owner_id, record_id\nfilename / kind / status",
+      [
+        620,
+        550,
+        1080,
+        800
+      ]
+    ],
+    "p": [
+      "extracted_pages\nPK id / FK document_id\npage / text / method",
+      [
+        40,
+        550,
+        500,
+        800
+      ]
+    ],
+    "c": [
+      "chunks\nPK id / FK document_id\npage / offsets / text",
+      [
+        1200,
+        550,
+        1660,
+        800
+      ]
+    ]
+  },
+  "edges": [
+    [
+      "u",
+      "r",
+      "1 to many"
+    ],
+    [
+      "r",
+      "s",
+      "1 to many"
+    ],
+    [
+      "r",
+      "d",
+      "1 to many"
+    ],
+    [
+      "d",
+      "p",
+      "1 to many"
+    ],
+    [
+      "d",
+      "c",
+      "1 to many"
+    ]
+  ]
+}

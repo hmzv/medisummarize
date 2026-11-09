@@ -14,11 +14,13 @@ The non-retrieval baseline **must still receive clinical document content**. Com
 - Long cases: a documented deterministic truncation strategy is used, and lost coverage is reported.
 - The same model identifier, output schema, and comparable generation settings are used in both conditions unless a deviation is recorded.
 
-The current script (`scripts/evaluate.py`) uses file-level passages for the RAG condition and concatenated file text for the baseline. It does **not** call the live retrieval index. Live OCR is not executed inside the script; image-only Case B uses `expected_text.txt` as a labeled stand-in.
+The corrected script (`scripts/evaluate.py`, 9 November 2026) uses the shared page-aware chunker, configured embedding provider, exact cosine ranking and the runtime's five section queries. It takes up to four chunks per query and deduplicates them. This offline in-memory retrieval avoids user/runtime data while exercising real chunk selection. The non-retrieval condition receives concatenated full text. Both prompts use the same generator and output schema. Small cases may retrieve almost all their chunks, limiting experimental discrimination. The harness is a pilot rather than an independent clinical benchmark.
+
+Live OCR is not executed inside the script. Image cases B and F use explicitly labeled companion transcripts, so OCR quality needs a separate assessment. The current prompt builder supplies all selected text without explicit truncation. Larger cases can exceed a provider's context window. Record the emitted input character count, failures and any provider-side truncation, and implement a shared documented context-budget policy before extending the pilot.
 
 ## Conditions
 
-1. **RAG** — patient-scoped retrieval of text passages, then structured generation (live API) or file-level passages (offline harness).
+1. **RAG** — record/case-scoped retrieval of chunks, then structured generation.
 2. **Non-retrieval baseline** — extracted text (or truncated extracted text) supplied directly.
 
 Mock/test providers must never be mixed into real evaluation metrics.
@@ -58,7 +60,7 @@ Do not copy debug F1 values into a results chapter.
 
 ## Stored artifacts
 
-Each run stores case ID, model and prompt versions, outputs, evidence IDs, and metric objects. Export formats: JSON and CSV under `data/evaluation/results/` (gitignored).
+Each run stores case ID/split, model and prompt versions, provider, chunk parameters, retrieval backend, outputs, metric objects, input character count, generation duration and retrieval duration. Export formats: JSON and CSV under `data/evaluation/results/` (gitignored). Mock or invalid structured output is excluded from reportable results. The packaged FYP I evidence is an explicitly labeled mock dry run.
 
 ## Reporting rules
 

@@ -1,0 +1,85 @@
+{
+  "nodes": {
+    "a": [
+      "Auth / records\nget_owned_record()",
+      [
+        40,
+        60,
+        500,
+        280
+      ]
+    ],
+    "b": [
+      "Ingestion / extraction\nupload_document()\nextract_document()",
+      [
+        620,
+        60,
+        1080,
+        280
+      ]
+    ],
+    "c": [
+      "Retrieval\nindex_owned_record()\nretrieve_for_record()",
+      [
+        1200,
+        60,
+        1660,
+        280
+      ]
+    ],
+    "d": [
+      "Summary lifecycle\ninvalidate_summaries()",
+      [
+        40,
+        560,
+        500,
+        780
+      ]
+    ],
+    "e": [
+      "Summarization\ngenerate_record_summary()\n_parse_and_validate()",
+      [
+        620,
+        560,
+        1080,
+        780
+      ]
+    ],
+    "f": [
+      "Provider interfaces\nembed() / generate()",
+      [
+        1200,
+        560,
+        1660,
+        780
+      ]
+    ]
+  },
+  "edges": [
+    [
+      "a",
+      "b",
+      "authorize"
+    ],
+    [
+      "b",
+      "c",
+      "index"
+    ],
+    [
+      "b",
+      "d",
+      "source change"
+    ],
+    [
+      "c",
+      "e",
+      "evidence"
+    ],
+    [
+      "e",
+      "f",
+      "generate"
+    ]
+  ]
+}

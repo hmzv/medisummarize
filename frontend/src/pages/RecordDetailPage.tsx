@@ -1,349 +1,112 @@
-import { type FormEvent, useEffect, useState } from "react";
+import { type FormEvent, useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import {
-  ApiError,
-  deleteDocument,
-  deleteRecord,
-  downloadDocument,
-  extractDocument,
-  fetchExtractedText,
-  fetchSummary,
-  generateSummary,
-  getRecord,
-  listDocuments,
-  uploadDocument,
-  type DocumentResponse,
-  type EvidencePassage,
-  type ExtractedPageListResponse,
-  type RecordResponse,
-  type SummaryResponse,
-} from "../api/client";
+import { ApiError, deleteDocument, deleteRecord, downloadDocument, extractDocument, fetchExtractedText, fetchSummary, generateSummary, getRecord, listDocuments, uploadDocument, type DocumentResponse, type EvidencePassage, type ExtractedPageListResponse, type RecordResponse, type SummaryResponse } from "../api/client";
 import { PrototypeShell } from "../components/PrototypeShell";
-import {
-  extractedPageAnchorId,
-  SummaryReview,
-} from "../components/SummaryReview";
+import { Icon } from "../components/Icon";
+import { extractedPageAnchorId, SummaryReview } from "../components/SummaryReview";
 
 export function RecordDetailPage() {
   const { recordId } = useParams();
   const navigate = useNavigate();
+  const input = useRef<HTMLInputElement>(null);
   const [record, setRecord] = useState<RecordResponse | null>(null);
   const [documents, setDocuments] = useState<DocumentResponse[]>([]);
   const [extracted, setExtracted] = useState<Record<string, ExtractedPageListResponse>>({});
   const [summary, setSummary] = useState<SummaryResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [pending, setPending] = useState(false);
-  const [file, setFile] = useState<File | null>(null);
-
-  async function refreshDocuments(id: string) {
-    const items = await listDocuments(id);
-    setDocuments(items);
-  }
-
+  const [busy, setBusy] = useState("");
+  const [notice, setNotice] = useState("");
+  const [files, setFiles] = useState<File[]>([]);
+  const [tab, setTab] = useState("documents");
+  const [dragging, setDragging] = useState(false);
+  const [activePage, setActivePage] = useState("");
+  const pending = !!busy;
+  const waitingForExtraction = documents.some(d => d.status === "uploaded" || d.status === "processing");
   useEffect(() => {
-    if (!recordId) {
-      return;
-    }
-    void getRecord(recordId)
-      .then(async (current) => {
-        setRecord(current);
-        await refreshDocuments(current.id);
-        try {
-          setSummary(await fetchSummary(current.id));
-        } catch (err) {
-          if (!(err instanceof ApiError && err.status === 404)) {
-            throw err;
-          }
-        }
-      })
-      .catch((err: unknown) => {
-        setError(err instanceof ApiError ? err.message : "Unable to load record.");
-      });
+    if (!recordId || !waitingForExtraction) return;
+    let active = true;
+    let attempts = 0;
+    const timer = window.setInterval(() => {
+      attempts += 1;
+      if (attempts > 60) { window.clearInterval(timer); return; }
+      void listDocuments(recordId).then(items => { if (active) setDocuments(items); }).catch(() => { /* The next scheduled check can recover a transient connection failure. */ });
+    }, 2000);
+    return () => { active = false; window.clearInterval(timer); };
+  }, [recordId, waitingForExtraction]);
+  useEffect(() => {
+    let active = true;
+    setRecord(null); setDocuments([]); setSummary(null); setExtracted({}); setError(null); setFiles([]); setNotice(""); setActivePage(""); setTab("documents");
+    if (!recordId) return;
+    void Promise.all([getRecord(recordId), listDocuments(recordId), fetchSummary(recordId).catch((err: unknown) => {
+      if (err instanceof ApiError && err.status === 404) return null;
+      throw err;
+    })]).then(([r, docs, s]) => { if (active) { setRecord(r); setDocuments(docs); setSummary(s); } }).catch((err: unknown) => { if (active) setError(err instanceof ApiError ? err.message : "Unable to load this record. Return to Records and try again."); });
+    return () => { active = false; };
   }, [recordId]);
-
-  async function onGenerateSummary() {
-    if (!recordId) {
-      return;
-    }
-    setPending(true);
-    setError(null);
-    try {
-      const result = await generateSummary(recordId);
-      setSummary(result);
-    } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Unable to generate a summary.");
-    } finally {
-      setPending(false);
+  async function act(label: string, action: () => Promise<void>) {
+    setBusy(label); setError(null); setNotice("");
+    try { await action(); }
+    catch (err) { setError(err instanceof ApiError ? err.message : `${label} failed. Check your connection and try again.`); }
+    finally { setBusy(""); }
+  }
+  function selectFiles(selected: File[]) {
+    setFiles(selected); setError(null);
+    if (selected.some(f => !/\.(pdf|png|jpe?g|txt)$/i.test(f.name))) {
+      setError("Choose PDF, PNG, JPEG, or UTF-8 text files."); setFiles([]);
     }
   }
-
-  async function onOpenSource(passage: EvidencePassage) {
-    if (!recordId) {
-      return;
-    }
-    try {
-      if (!extracted[passage.document_id]) {
-        const result = await fetchExtractedText(recordId, passage.document_id);
-        setExtracted((current) => ({ ...current, [passage.document_id]: result }));
-      }
-    } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Unable to load extracted text.");
-      return;
-    }
-    window.setTimeout(() => {
-      window.document
-        .getElementById(extractedPageAnchorId(passage.document_id, passage.page))
-        ?.scrollIntoView({ behavior: "smooth", block: "center" });
-    }, 50);
-  }
-
-  async function onDelete() {
-    if (!recordId) {
-      return;
-    }
-    const confirmed = window.confirm(
-      "Delete this synthetic record container and its files? This cannot be undone.",
-    );
-    if (!confirmed) {
-      return;
-    }
-    setPending(true);
-    try {
-      await deleteRecord(recordId);
-      navigate("/records");
-    } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Unable to delete record.");
-      setPending(false);
-    }
-  }
-
   async function onUpload(event: FormEvent) {
-    event.preventDefault();
-    if (!recordId || !file) {
-      return;
-    }
-    setError(null);
-    setPending(true);
-    try {
-      await uploadDocument(recordId, file);
-      setFile(null);
-      await refreshDocuments(recordId);
-    } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Unable to upload the file.");
-    } finally {
-      setPending(false);
-    }
+    event.preventDefault(); if (!recordId || !files.length) return;
+    await act("Uploading documents", async () => {
+      // Remove successful files immediately so retrying a partial batch cannot duplicate them.
+      for (const file of files) {
+        await uploadDocument(recordId, file);
+        setFiles(current => current.filter(f => f !== file));
+        setSummary(null); setNotice("Documents changed. Generate a new summary after checking the extracted text.");
+        setDocuments(await listDocuments(recordId));
+      }
+      if (input.current) input.current.value = "";
+    });
   }
-
-  async function onExtract(documentId: string) {
-    if (!recordId) {
-      return;
-    }
-    setPending(true);
-    setError(null);
-    try {
-      const result = await extractDocument(recordId, documentId);
-      setExtracted((current) => ({ ...current, [documentId]: result }));
-      await refreshDocuments(recordId);
-    } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Extraction failed.");
-    } finally {
-      setPending(false);
-    }
+  async function showText(id: string) {
+    if (!recordId) return;
+    await act("Loading extracted text", async () => { const result = await fetchExtractedText(recordId, id); setExtracted(current => ({ ...current, [id]: result })); });
   }
-
-  async function onShowExtracted(documentId: string) {
-    if (!recordId) {
-      return;
-    }
-    try {
-      const result = await fetchExtractedText(recordId, documentId);
-      setExtracted((current) => ({ ...current, [documentId]: result }));
-    } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Unable to load extracted text.");
-    }
+  async function openSource(passage: EvidencePassage) {
+    if (!recordId) return;
+    await act("Opening source", async () => {
+      const result = await fetchExtractedText(recordId, passage.document_id);
+      setExtracted(current => ({ ...current, [passage.document_id]: result }));
+      setActivePage(extractedPageAnchorId(passage.document_id, passage.page)); setTab("documents");
+    });
   }
-
-  async function onDeleteDocument(documentId: string) {
-    if (!recordId) {
-      return;
-    }
-    setPending(true);
-    setError(null);
-    try {
-      await deleteDocument(recordId, documentId);
-      await refreshDocuments(recordId);
-    } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Unable to delete the document.");
-    } finally {
-      setPending(false);
-    }
-  }
-
-  return (
-    <PrototypeShell>
-      <main className="mx-auto max-w-5xl px-4 py-8">
-        <p className="text-sm">
-          <Link to="/records" className="text-accent-dark hover:underline">
-            ← All records
-          </Link>
-        </p>
-        {error ? <p className="mt-4 text-sm text-red-800">{error}</p> : null}
-        {record ? (
-          <>
-            <section className="mt-6 rounded-lg border border-line bg-card p-6">
-              <p className="text-xs font-semibold uppercase tracking-wide text-accent">
-                Synthetic container
-              </p>
-              <h1 className="mt-2 text-2xl font-semibold">{record.display_label}</h1>
-              <p className="mt-2 text-sm text-muted">{record.synthetic_notice}</p>
-              <dl className="mt-4 space-y-1 text-sm text-muted">
-                <div>Opaque ID: {record.id}</div>
-                <div>Created: {new Date(record.created_at).toLocaleString()}</div>
-              </dl>
-            </section>
-            <section className="mt-6 rounded-lg border border-line bg-card p-6">
-              <h2 className="text-lg font-semibold">Documents</h2>
-              <p className="mt-1 text-sm text-muted">
-                PDF, PNG, JPEG, or UTF-8 text. The server checks file content, not
-                the browser MIME type. Original files are stored outside the web
-                root and are only downloadable by the owner. Upload files from{" "}
-                <code>data/synthetic/</code> for the labeled demo cases.
-              </p>
-              <form className="mt-4 flex flex-col gap-3 sm:flex-row" onSubmit={(event) => void onUpload(event)}>
-                <input
-                  className="flex-1 text-sm"
-                  type="file"
-                  accept=".pdf,.png,.jpg,.jpeg,.txt,application/pdf,image/png,image/jpeg,text/plain"
-                  onChange={(event) => setFile(event.target.files?.[0] ?? null)}
-                  required
-                />
-                <button
-                  type="submit"
-                  disabled={pending || !file}
-                  className="rounded bg-accent px-4 py-2 text-sm font-medium text-white hover:bg-accent-dark disabled:opacity-60"
-                >
-                  {pending ? "Working…" : "Upload"}
-                </button>
-              </form>
-              <ul className="mt-6 divide-y divide-line rounded border border-line">
-                {documents.length === 0 ? (
-                  <li className="px-4 py-4 text-sm text-muted">No documents uploaded.</li>
-                ) : (
-                  documents.map((doc) => (
-                    <li key={doc.id} className="flex flex-col gap-3 px-4 py-3">
-                      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                      <div>
-                        <p className="font-medium">{doc.original_filename}</p>
-                        <p className="text-xs text-muted">
-                          {doc.file_kind} · {doc.status} · {doc.size_bytes} bytes
-                          {doc.page_count ? ` · ${doc.page_count} page(s)` : ""}
-                        </p>
-                        {doc.public_error ? (
-                          <p className="text-xs text-red-800">{doc.public_error}</p>
-                        ) : null}
-                      </div>
-                      <div className="flex flex-wrap gap-2 text-sm">
-                        <button
-                          type="button"
-                          className="rounded border border-line px-3 py-1 hover:bg-paper"
-                          onClick={() => void downloadDocument(record.id, doc).catch((err: unknown) => {
-                            setError(err instanceof ApiError ? err.message : "Download failed.");
-                          })}
-                        >
-                          Original
-                        </button>
-                        <button
-                          type="button"
-                          className="rounded border border-line px-3 py-1 hover:bg-paper"
-                          disabled={pending}
-                          onClick={() => void onExtract(doc.id)}
-                        >
-                          Extract text
-                        </button>
-                        <button
-                          type="button"
-                          className="rounded border border-line px-3 py-1 hover:bg-paper"
-                          onClick={() => void onShowExtracted(doc.id)}
-                        >
-                          Review text
-                        </button>
-                        <button
-                          type="button"
-                          className="rounded border border-red-800 px-3 py-1 text-red-800 hover:bg-red-50"
-                          disabled={pending}
-                          onClick={() => void onDeleteDocument(doc.id)}
-                        >
-                          Delete
-                        </button>
-                      </div>
-                      </div>
-                      {extracted[doc.id] ? (
-                        <div className="rounded border border-line bg-paper p-3 text-sm">
-                          <p className="text-xs text-muted">
-                            Status: {extracted[doc.id].status}
-                            {extracted[doc.id].public_error
-                              ? ` · ${extracted[doc.id].public_error}`
-                              : ""}
-                          </p>
-                          {extracted[doc.id].items.map((page) => (
-                            <div
-                              key={page.id}
-                              id={extractedPageAnchorId(doc.id, page.page_number)}
-                              className="mt-2"
-                            >
-                              <p className="text-xs font-semibold text-accent-dark">
-                                Page {page.page_number} · {page.extraction_method}
-                                {page.ocr_confidence !== null
-                                  ? ` · OCR confidence ${page.ocr_confidence.toFixed(0)}`
-                                  : ""}
-                              </p>
-                              {page.warnings.map((warning) => (
-                                <p key={warning} className="text-xs text-red-800">
-                                  {warning}
-                                </p>
-                              ))}
-                              <pre className="mt-1 whitespace-pre-wrap font-sans text-sm text-ink">
-                                {page.text || "(no text)"}
-                              </pre>
-                            </div>
-                          ))}
-                        </div>
-                      ) : null}
-                    </li>
-                  ))
-                )}
-              </ul>
-            </section>
-            <section className="mt-6 rounded-lg border border-line bg-card p-6">
-              <h2 className="text-lg font-semibold">Structured summary</h2>
-              <p className="mt-1 text-sm text-muted">
-                Retrieval is limited to this record. Click a citation to highlight
-                the retrieved passage and scroll toward the matching extracted page.
-              </p>
-              <button
-                type="button"
-                className="mt-4 rounded bg-accent px-4 py-2 text-sm font-medium text-white hover:bg-accent-dark disabled:opacity-60"
-                disabled={pending}
-                onClick={() => void onGenerateSummary()}
-              >
-                {pending ? "Working…" : "Generate summary"}
-              </button>
-              {summary ? <SummaryReview summary={summary} onOpenSource={(passage) => void onOpenSource(passage)} /> : null}
-            </section>
-            <button
-              type="button"
-              onClick={() => void onDelete()}
-              disabled={pending}
-              className="mt-6 rounded border border-red-800 px-4 py-2 text-sm text-red-800 hover:bg-red-50 disabled:opacity-60"
-            >
-              {pending ? "Deleting…" : "Delete record"}
-            </button>
-          </>
-        ) : error ? null : (
-          <p className="mt-6 text-sm text-muted">Loading record…</p>
-        )}
-      </main>
-    </PrototypeShell>
-  );
+  useEffect(() => { if (activePage && tab === "documents") document.getElementById(activePage)?.scrollIntoView({ behavior: "smooth", block: "center" }); }, [activePage, extracted, tab]);
+  const processed = documents.filter(d => ["extracted", "indexed", "ready"].includes(d.status)).length;
+  return <PrototypeShell><main className="workspace record-detail">
+    <Link to="/records" className="text-link back-link">All records</Link>
+    {error && <p className="error-message" role="alert">{error}</p>}
+    {!record ? <p role="status">{error ? "This record is unavailable." : "Loading record…"}</p> : <>
+      <div className="page-heading"><div><h1>{record.display_label}</h1><p>Synthetic patient record <span className="separator">·</span> Created {new Date(record.created_at).toLocaleDateString("en-GB", {day:"numeric",month:"short",year:"numeric"})}</p></div><button className="button primary" disabled={pending || !processed} onClick={() => void act("Generating summary", async () => { setSummary(await generateSummary(record.id)); setTab("summary"); })}><Icon name="activity" />{busy === "Generating summary" ? "Generating…" : summary ? "Regenerate summary" : "Generate summary"}</button></div>
+      <ol className="workflow-steps" aria-label="Review workflow"><li data-complete={documents.length > 0}><span>1</span>Add documents <small>{documents.length} uploaded</small></li><li data-complete={processed > 0}><span>2</span>Review extracted text <small>{processed} ready</small></li><li data-complete={!!summary}><span>3</span>Verify summary <small>{summary ? "Ready for review" : "Awaiting generation"}</small></li></ol>
+      {!processed && documents.length > 0 && <p className="notice">Extract text from at least one document to enable summary generation.</p>}
+      {busy && <p className="working-status" role="status"><span className="busy-dot" />{busy}… {busy === "Generating summary" && "This may take up to two minutes."}</p>}
+      {notice && <p className="notice" role="status">{notice}</p>}
+      <div className="tabs" role="tablist" aria-label="Record views">{["documents", "summary"].map(t => <button key={t} id={`tab-${t}`} role="tab" aria-selected={tab === t} aria-controls={`panel-${t}`} tabIndex={tab === t ? 0 : -1} onKeyDown={e => { if (e.key === "ArrowLeft" || e.key === "ArrowRight") { e.preventDefault(); const next = t === "documents" ? "summary" : "documents"; setTab(next); document.getElementById(`tab-${next}`)?.focus(); } }} onClick={() => setTab(t)}>{t === "documents" ? `Documents (${documents.length})` : "Summary & evidence"}</button>)}</div>
+      <section role="tabpanel" id="panel-documents" aria-labelledby="tab-documents" hidden={tab !== "documents"}>
+        <form className={`upload-zone ${dragging ? "dragging" : ""}`} onSubmit={e => void onUpload(e)} onDragOver={e => { e.preventDefault(); setDragging(true); }} onDragLeave={() => setDragging(false)} onDrop={e => { e.preventDefault(); setDragging(false); if (!pending) selectFiles(Array.from(e.dataTransfer.files)); }}>
+          <Icon name="upload" size={30} /><h2>Add source documents</h2><p>Drop files here, or choose files below. PDF, PNG, JPEG, and UTF-8 text.</p><label className="file-picker">Choose synthetic files<input ref={input} aria-label="Choose synthetic files" type="file" multiple accept=".pdf,.png,.jpg,.jpeg,.txt" disabled={pending} onChange={e => selectFiles(Array.from(e.target.files ?? []))} /></label>
+          {files.length > 0 && <><ul className="selected-files">{files.map((f, i) => <li key={`${f.name}-${i}`}>{f.name} <small>({(f.size / 1024).toFixed(1)} KB)</small></li>)}</ul><button className="button primary" disabled={pending}>Upload {files.length} file{files.length === 1 ? "" : "s"}</button></>}
+        </form>
+        <div className="section-heading"><h2>Source documents</h2><p>Check extracted text against the original before reviewing a summary.</p></div>
+        {!documents.length ? <div className="document-empty"><Icon name="file" size={30} /><p>No documents yet. Add the files for this fictional case above.</p></div> : <ul className="document-list">{documents.map(doc => <li key={doc.id}>
+          <div className="document-heading"><span className="file-symbol"><Icon name="file" /></span><div className="document-title"><h3>{doc.original_filename}</h3><p>{doc.file_kind.toUpperCase()} · {(doc.size_bytes / 1024).toFixed(1)} KB {doc.page_count ? `· ${doc.page_count} page${doc.page_count === 1 ? "" : "s"}` : ""}</p></div><span className={`status-label ${["extracted", "indexed", "ready"].includes(doc.status) ? "ready" : ""}`}>{["extracted", "indexed", "ready"].includes(doc.status) ? "Text ready" : doc.status.replaceAll("_", " ")}</span></div>
+          {doc.public_error && <p className="error-message">{doc.public_error}</p>}
+          <div className="document-actions"><button className="button small" disabled={pending} onClick={() => void act("Downloading original", () => downloadDocument(record.id, doc))}>Original</button><button className="button small" disabled={pending} onClick={() => void act("Extracting text", async () => { const result = await extractDocument(record.id, doc.id); setExtracted(current => ({...current, [doc.id]: result})); setDocuments(await listDocuments(record.id)); setSummary(null); setNotice("Text changed. Generate a new summary when your review is complete."); })}>Extract text</button><button className="button small" disabled={pending || !["extracted", "indexed", "ready"].includes(doc.status)} aria-expanded={!!extracted[doc.id]} onClick={() => extracted[doc.id] ? setExtracted(current => { const next = {...current}; delete next[doc.id]; return next; }) : void showText(doc.id)}>{extracted[doc.id] ? "Hide text" : "Review text"}</button><button className="text-button danger" disabled={pending} onClick={() => { if (window.confirm(`Delete ${doc.original_filename}? Its extracted text and current summary will be removed.`)) void act("Deleting document", async () => { await deleteDocument(record.id, doc.id); setDocuments(await listDocuments(record.id)); setExtracted(current => { const next = {...current}; delete next[doc.id]; return next; }); setSummary(null); setNotice("Document removed. Generate a fresh summary from the remaining sources."); }); }}>Delete</button></div>
+          {extracted[doc.id] && <div className="extracted-text">{!extracted[doc.id].items.length && <p>No text available. Try extracting again or use a clearer source.</p>}{extracted[doc.id].items.map(page => <div key={page.id} id={extractedPageAnchorId(doc.id, page.page_number)} className={activePage === extractedPageAnchorId(doc.id, page.page_number) ? "source-page active-page" : "source-page"}><h4>Page {page.page_number}<span>{page.extraction_method}{page.ocr_confidence !== null ? ` · OCR confidence ${page.ocr_confidence.toFixed(0)}` : ""}</span></h4>{page.warnings.map(w => <p className="notice" key={w}>{w}</p>)}<pre>{page.text || "No text on this page."}</pre></div>)}</div>}
+        </li>)}</ul>}
+      </section>
+      <section role="tabpanel" id="panel-summary" aria-labelledby="tab-summary" hidden={tab !== "summary"}>{summary ? <SummaryReview key={summary.id} summary={summary} recordLabel={record.display_label} onOpenSource={p => void openSource(p)} /> : <div className="empty-state"><Icon name="activity" size={36} /><h2>Your summary will appear here</h2><p>Add documents and review their text, then choose Generate summary.</p></div>}</section>
+      <details className="record-management"><summary>Record management</summary><p>Deleting this record permanently removes its source documents and generated summaries.</p><button className="button danger" disabled={pending} onClick={() => { if (window.confirm("Permanently delete this fictional record and all its files?")) void act("Deleting record", async () => { await deleteRecord(record.id); navigate("/records"); }); }}>Delete record</button></details>
+    </>}
+  </main></PrototypeShell>;
 }

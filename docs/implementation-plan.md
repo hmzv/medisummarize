@@ -43,7 +43,7 @@ Auth: email + password, hashed with bcrypt, JWT access tokens in `sessionStorage
 | 9 | Frontend summary review workflow | Completed (disclaimer, mock banner, clickable evidence panel, tests) |
 | 10 | Synthetic demonstration data | Completed (uploadable cases A–H + manifest) |
 | 11 | Non-retrieval baseline and evaluation | Completed (ROUGE / fact coverage / citation validity; mock scores quarantined) |
-| 12 | Integration, safety tests, and documentation | Partial (API + security notes, 49+ backend tests; no Playwright suite) |
+| 12 | Integration, safety tests, and documentation | 60 backend and 9 frontend tests pass; report/SRS/SDS and defense package prepared. Real-model baseline and browser walkthrough remain open. |
 
 ## Segment 1 — Foundation
 

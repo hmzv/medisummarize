@@ -1,0 +1,85 @@
+{
+  "nodes": {
+    "a": [
+      "React browser client\nrecords / sources / evidence",
+      [
+        50,
+        60,
+        500,
+        280
+      ]
+    ],
+    "b": [
+      "FastAPI / Pydantic\nJWT and ownership",
+      [
+        625,
+        60,
+        1075,
+        280
+      ]
+    ],
+    "c": [
+      "Processing services\nvalidate / OCR / retrieve",
+      [
+        1200,
+        60,
+        1650,
+        280
+      ]
+    ],
+    "d": [
+      "SQLAlchemy metadata\nSQLite now, PostgreSQL planned",
+      [
+        50,
+        560,
+        500,
+        790
+      ]
+    ],
+    "e": [
+      "Protected source files\nNumPy record indexes",
+      [
+        625,
+        560,
+        1075,
+        790
+      ]
+    ],
+    "f": [
+      "GenerationProvider\nmock / compatible local server",
+      [
+        1200,
+        560,
+        1650,
+        790
+      ]
+    ]
+  },
+  "edges": [
+    [
+      "a",
+      "b",
+      "/api/v1"
+    ],
+    [
+      "b",
+      "c",
+      "orchestrate"
+    ],
+    [
+      "b",
+      "d",
+      "persist"
+    ],
+    [
+      "c",
+      "e",
+      "sources / vectors"
+    ],
+    [
+      "c",
+      "f",
+      "passage text"
+    ]
+  ]
+}

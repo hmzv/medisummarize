@@ -1,0 +1,50 @@
+{
+  "nodes": {
+    "n": [
+      "Navigation\nRecords\nDemo guide\nSystem status\nSign out",
+      [
+        40,
+        40,
+        365,
+        810
+      ]
+    ],
+    "h": [
+      "Case label and date                              Generate summary",
+      [
+        410,
+        40,
+        1650,
+        160
+      ]
+    ],
+    "t": [
+      "Add documents      /      Review text      /      Verify summary",
+      [
+        410,
+        205,
+        1650,
+        330
+      ]
+    ],
+    "s": [
+      "Documents tab\nUpload files\nOriginal / Extract / Review",
+      [
+        410,
+        390,
+        985,
+        810
+      ]
+    ],
+    "e": [
+      "Summary and evidence tab\nFixed summary sections\nCitation passage and source page\nExport text / JSON",
+      [
+        1040,
+        390,
+        1650,
+        810
+      ]
+    ]
+  },
+  "edges": []
+}

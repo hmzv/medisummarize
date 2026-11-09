@@ -35,6 +35,8 @@ def extract_document(db: Session, document_id: uuid.UUID) -> ExtractedPageListRe
     if document is None or document.status == DocumentStatus.deleted.value:
         raise AppError(status_code=404, detail="Document not found.")
     document.status = DocumentStatus.processing.value
+    from app.services.summary_lifecycle import invalidate_summaries
+    invalidate_summaries(db, document.owner_id, document.record_id)
     document.public_error = None
     db.commit()
     try:

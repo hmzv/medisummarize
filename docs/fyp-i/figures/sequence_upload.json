@@ -1,0 +1,40 @@
+{
+  "lifelines": [
+    "Reviewer",
+    "API",
+    "Validation / OCR",
+    "Stores"
+  ],
+  "messages": [
+    [
+      0,
+      1,
+      "POST documents(file)"
+    ],
+    [
+      1,
+      2,
+      "check kind / limits"
+    ],
+    [
+      2,
+      3,
+      "store protected original + metadata"
+    ],
+    [
+      1,
+      2,
+      "extract_document(id)"
+    ],
+    [
+      2,
+      3,
+      "pages + chunks + vectors"
+    ],
+    [
+      1,
+      0,
+      "metadata / text status"
+    ]
+  ]
+}

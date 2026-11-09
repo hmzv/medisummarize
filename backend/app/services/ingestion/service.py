@@ -89,6 +89,8 @@ def upload_document(
         image_height=detected.image_height,
     )
     db.add(document)
+    from app.services.summary_lifecycle import invalidate_summaries
+    invalidate_summaries(db, owner_id, record_id)
     db.commit()
     db.refresh(document)
     return document
@@ -105,7 +107,18 @@ def delete_document(
     path = disk.document_path(settings, document)
     disk.delete_quiet(path)
     document.status = DocumentStatus.deleted.value
+    from app.services.summary_lifecycle import invalidate_summaries
+    from app.models.extracted_page import ExtractedPage
+    from app.models.chunk import Chunk
+    from sqlalchemy import delete
+    invalidate_summaries(db, owner_id, record_id)
+    db.execute(delete(Chunk).where(Chunk.document_id == document_id))
+    db.execute(delete(ExtractedPage).where(ExtractedPage.document_id == document_id))
     db.commit()
+    # Rebuild rankings as well as rows: stale top-k IDs could otherwise hide
+    # surviving passages, and deleted-source vectors must not remain on disk.
+    from app.services.retrieval.service import index_owned_record
+    index_owned_record(db, owner_id, record_id)
 
 
 def delete_files_for_record(db: Session, owner_id: uuid.UUID, record_id: uuid.UUID) -> None:

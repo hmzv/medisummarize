@@ -1,0 +1,57 @@
+{
+  "nodes": {
+    "a": [
+      "Presentation\nReact pages and components",
+      [
+        250,
+        30,
+        1450,
+        165
+      ]
+    ],
+    "b": [
+      "HTTP boundary\nFastAPI routes / auth dependencies / Pydantic",
+      [
+        250,
+        235,
+        1450,
+        370
+      ]
+    ],
+    "c": [
+      "Application services\ningestion / extraction / retrieval / summarization",
+      [
+        250,
+        440,
+        1450,
+        575
+      ]
+    ],
+    "d": [
+      "Persistence and providers\nSQLAlchemy / files / vectors / embeddings / generation",
+      [
+        250,
+        645,
+        1450,
+        800
+      ]
+    ]
+  },
+  "edges": [
+    [
+      "a",
+      "b",
+      ""
+    ],
+    [
+      "b",
+      "c",
+      ""
+    ],
+    [
+      "c",
+      "d",
+      ""
+    ]
+  ]
+}

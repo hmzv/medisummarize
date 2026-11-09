@@ -1,0 +1,85 @@
+{
+  "nodes": {
+    "a": [
+      "Login / register",
+      [
+        50,
+        70,
+        480,
+        250
+      ]
+    ],
+    "b": [
+      "Records\ncreate / search / sort",
+      [
+        630,
+        70,
+        1070,
+        250
+      ]
+    ],
+    "c": [
+      "Record detail\nDocuments tab",
+      [
+        1220,
+        70,
+        1650,
+        250
+      ]
+    ],
+    "d": [
+      "Summary and evidence\ncitation / source page",
+      [
+        1220,
+        580,
+        1650,
+        780
+      ]
+    ],
+    "e": [
+      "Demo guide",
+      [
+        630,
+        580,
+        1070,
+        780
+      ]
+    ],
+    "f": [
+      "System status",
+      [
+        50,
+        580,
+        480,
+        780
+      ]
+    ]
+  },
+  "edges": [
+    [
+      "a",
+      "b",
+      "session"
+    ],
+    [
+      "b",
+      "c",
+      "open case"
+    ],
+    [
+      "c",
+      "d",
+      "generate"
+    ],
+    [
+      "b",
+      "e",
+      "navigation"
+    ],
+    [
+      "b",
+      "f",
+      "navigation"
+    ]
+  ]
+}

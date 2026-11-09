@@ -1,0 +1,87 @@
+{
+  "nodes": {
+    "a": [
+      "Create fictional case",
+      [
+        50,
+        70,
+        480,
+        240
+      ],
+      "oval"
+    ],
+    "b": [
+      "Upload and validate sources",
+      [
+        630,
+        70,
+        1070,
+        240
+      ]
+    ],
+    "c": [
+      "Extract / inspect text",
+      [
+        1220,
+        70,
+        1650,
+        240
+      ]
+    ],
+    "d": [
+      "Generate summary\nexplicit error on failure",
+      [
+        1220,
+        580,
+        1650,
+        780
+      ]
+    ],
+    "e": [
+      "Check claim and source\nrecord unavailable information",
+      [
+        630,
+        580,
+        1070,
+        780
+      ]
+    ],
+    "f": [
+      "Export labeled research result",
+      [
+        50,
+        580,
+        480,
+        780
+      ],
+      "oval"
+    ]
+  },
+  "edges": [
+    [
+      "a",
+      "b",
+      ""
+    ],
+    [
+      "b",
+      "c",
+      "accepted"
+    ],
+    [
+      "c",
+      "d",
+      "reviewed"
+    ],
+    [
+      "d",
+      "e",
+      "valid JSON"
+    ],
+    [
+      "e",
+      "f",
+      "review complete"
+    ]
+  ]
+}

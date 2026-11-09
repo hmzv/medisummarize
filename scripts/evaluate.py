@@ -13,6 +13,9 @@ from __future__ import annotations
 import csv
 import json
 import sys
+import time
+import uuid
+from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -26,11 +29,18 @@ from app.schemas.summaries import StructuredSummary  # noqa: E402
 from app.services.evaluation.cases import load_cases  # noqa: E402
 from app.services.evaluation.metrics import flatten_summary_text, score_summary  # noqa: E402
 from app.services.generation.providers import get_generation_provider  # noqa: E402
+from app.services.chunking.service import chunk_extracted_pages  # noqa: E402
+from app.services.embeddings.providers import get_embedding_provider  # noqa: E402
+from app.models.extracted_page import ExtractedPage  # noqa: E402
+from app.services.summarization import SECTION_QUERIES  # noqa: E402
+import numpy as np  # noqa: E402
 
 
 def _run_condition(name: str, user_prompt: str, allowed_ids: set[str], case) -> dict:
     provider = get_generation_provider()
+    started = time.perf_counter()
     result = provider.generate(SYSTEM_PROMPT, user_prompt)
+    generation_ms = round((time.perf_counter() - started) * 1000, 3)
     try:
         summary = StructuredSummary.model_validate_json(result.text)
         payload = summary.model_dump()
@@ -47,6 +57,8 @@ def _run_condition(name: str, user_prompt: str, allowed_ids: set[str], case) -> 
         allowed_ids=allowed_ids,
         is_mock=result.is_mock,
     )
+    if not valid and not result.is_mock:
+        metrics = {"reportable": False, "quarantine_reason": "Invalid structured JSON", "debug_scores": metrics.get("scores", {})}
     return {
         "condition": name,
         "provider": result.provider,
@@ -59,23 +71,39 @@ def _run_condition(name: str, user_prompt: str, allowed_ids: set[str], case) -> 
         "summary": payload,
         "prediction_text": flatten_summary_text(payload),
         "metrics": metrics,
+        "generation_ms": generation_ms,
+        "input_characters": len(user_prompt),
+        "input_prompt": user_prompt,
+        "allowed_source_ids": sorted(allowed_ids),
     }
 
 
 def _rag_evidence(case) -> list[dict[str, object]]:
-    items: list[dict[str, object]] = []
+    settings = get_settings()
+    pages = []
+    record_id = uuid.uuid5(uuid.NAMESPACE_URL, case.slug)
     for index, (filename, text) in enumerate(case.documents, start=1):
-        items.append(
-            {
-                "id": f"{case.id}-chunk-{index}",
-                "document_id": f"{case.slug}-{filename}",
-                "original_filename": filename,
-                "page": 1,
-                "method": "utf8_text",
-                "text": text,
-            }
-        )
-    return items
+        pages.append(ExtractedPage(owner_id=record_id, record_id=record_id,
+            document_id=uuid.uuid5(record_id, filename), page_number=1, text=text,
+            extraction_method="fixture_text", warnings_json="[]"))
+    chunks = chunk_extracted_pages(pages, settings.chunk_size, settings.chunk_overlap)
+    if not chunks:
+        return []
+    provider = get_embedding_provider()
+    matrix = np.asarray(provider.embed([c.text for c in chunks]), dtype=float)
+    norms = np.linalg.norm(matrix, axis=1, keepdims=True)
+    matrix = matrix / np.maximum(norms, 1e-12)
+    selected: dict[int, None] = {}
+    for _, query in SECTION_QUERIES:
+        vector = np.asarray(provider.embed([query])[0], dtype=float)
+        vector /= max(float(np.linalg.norm(vector)), 1e-12)
+        scores = matrix @ vector
+        for i in np.argsort(-scores, kind="stable")[:4]:
+            selected[int(i)] = None
+    names = {uuid.uuid5(record_id, filename): filename for filename, _ in case.documents}
+    return [{"id": str(chunks[i].chunk_id), "document_id": str(chunks[i].document_id),
+        "original_filename": names[chunks[i].document_id], "page": 1,
+        "method": "fixture_text", "text": chunks[i].text} for i in selected]
 
 
 def _baseline_evidence(case) -> list[dict[str, object]]:
@@ -98,9 +126,11 @@ def main() -> None:
     settings = get_settings()
     rows: list[dict] = []
     for case in load_cases():
+        retrieval_started = time.perf_counter()
         rag_evidence = _rag_evidence(case)
+        retrieval_ms = round((time.perf_counter() - retrieval_started) * 1000, 3)
         baseline_evidence = _baseline_evidence(case)
-        rag_prompt = build_user_prompt(rag_evidence, [f"{case.id}: file-level passages"] + list(case.notes))
+        rag_prompt = build_user_prompt(rag_evidence, [f"{case.id}: section-query cosine retrieval, top 4 per section"] + list(case.notes))
         baseline_prompt = build_user_prompt(
             baseline_evidence,
             [f"{case.id}: non-retrieval full extracted text"] + list(case.notes),
@@ -123,6 +153,11 @@ def main() -> None:
                     "harness_notes": list(case.notes),
                     "embedding_provider": settings.embedding_provider,
                     "generation_provider_setting": settings.generation_provider,
+                    "retrieval_ms": retrieval_ms if item["condition"] == "rag" else 0,
+                    "run_at": datetime.now(timezone.utc).isoformat(),
+                    "retrieval_backend": "numpy_exact",
+                    "chunk_size": settings.chunk_size,
+                    "chunk_overlap": settings.chunk_overlap,
                 }
             )
             rows.append(item)

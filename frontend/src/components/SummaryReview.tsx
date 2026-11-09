@@ -11,6 +11,7 @@ export function extractedPageAnchorId(documentId: string, page: number): string 
 
 type SummaryReviewProps = {
   summary: SummaryResponse;
+  recordLabel?: string;
   onOpenSource?: (passage: EvidencePassage) => void;
 };
 
@@ -22,16 +23,12 @@ const CLAIM_SECTIONS: Array<[string, (summary: SummaryResponse) => Claim[]]> = [
   ["Laboratory findings", (item) => item.summary.laboratory_findings],
 ];
 
-export function SummaryReview({ summary, onOpenSource }: SummaryReviewProps) {
+export function SummaryReview({ summary, onOpenSource, recordLabel = "Synthetic record" }: SummaryReviewProps) {
   const [activeId, setActiveId] = useState<string | null>(null);
-  const byId = new Map(summary.evidence.map((item) => [item.id, item]));
 
   function goToEvidence(passageId: string) {
     setActiveId(passageId);
-    const passage = byId.get(passageId);
-    if (passage) {
-      onOpenSource?.(passage);
-    }
+    // Keep the evidence in view. Opening the full source is a separate action.
     window.document.getElementById(evidenceAnchorId(passageId))?.scrollIntoView({
       behavior: "smooth",
       block: "center",
@@ -39,7 +36,9 @@ export function SummaryReview({ summary, onOpenSource }: SummaryReviewProps) {
   }
 
   return (
-    <div className="mt-4 grid gap-4 lg:grid-cols-2">
+    <div className="summary-review">
+      <div className="summary-toolbar"><div><h2>Structured summary</h2><p>Generated {new Date(summary.created_at).toLocaleString()} · {summary.generation_model}</p></div><div className="export-actions"><button className="button small" onClick={() => exportSummary(summary, recordLabel, "txt")}>Export text</button><button className="button small" onClick={() => exportSummary(summary, recordLabel, "json")}>Export JSON</button></div></div>
+      <div className="summary-columns">
       <div className="space-y-3 text-sm">
         {summary.is_mock ? (
           <p className="font-semibold text-red-800">
@@ -58,7 +57,7 @@ export function SummaryReview({ summary, onOpenSource }: SummaryReviewProps) {
             <div key={label}>
               <h3 className="font-semibold">{label}</h3>
               {claims.length === 0 ? (
-                <p className="text-muted">None stated.</p>
+                <p className="text-muted">Not documented in this summary.</p>
               ) : (
                 claims.map((claim) => (
                   <ClaimRow
@@ -118,6 +117,7 @@ export function SummaryReview({ summary, onOpenSource }: SummaryReviewProps) {
                     {passage.method}
                   </p>
                   <p className="mt-1 whitespace-pre-wrap">{passage.text}</p>
+                  {onOpenSource && <button className="text-button source-button" onClick={() => onOpenSource(passage)}>Open source page</button>}
                   <p className="mt-2 font-mono text-[11px] text-muted">{passage.id}</p>
                 </li>
               );
@@ -125,8 +125,22 @@ export function SummaryReview({ summary, onOpenSource }: SummaryReviewProps) {
           </ul>
         )}
       </aside>
+      </div>
     </div>
   );
+}
+
+function exportSummary(summary: SummaryResponse, label: string, format: "txt" | "json") {
+  const lines = ["MediSummarize AI", label, summary.is_mock ? "MOCK/TEST OUTPUT - not a real-model result" : "Research output - requires source review", `Generated: ${summary.created_at}`, `Provider: ${summary.generation_provider}`, `Model: ${summary.generation_model}`, `Embedding: ${summary.embedding_model}`, `Prompt: ${summary.prompt_version}`, ""];
+  for (const [title, read] of CLAIM_SECTIONS) {
+    lines.push(title, ...read(summary).map(c => `${c.text} [${c.source_ids.join(", ")}]`), "");
+  }
+  lines.push("Unresolved or unavailable", ...summary.summary.unresolved_or_unavailable, "Processing limitations", ...summary.summary.processing_limitations, ...summary.validation_warnings, "", "Source passages");
+  for (const p of summary.evidence) lines.push(`[${p.id}] ${p.original_filename}, page ${p.page}, ${p.method}`, p.text, "");
+  lines.push(summary.summary.disclaimer);
+  const content = format === "json" ? JSON.stringify({ record_label: label, ...summary }, null, 2) : lines.join("\n");
+  const url = URL.createObjectURL(new Blob([content], {type: format === "json" ? "application/json" : "text/plain;charset=utf-8"}));
+  const anchor = document.createElement("a"); anchor.href = url; anchor.download = `medisummarize-${summary.is_mock ? "MOCK-" : ""}${summary.id}.${format}`; anchor.click(); window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 function ClaimRow({

@@ -1,0 +1,85 @@
+{
+  "nodes": {
+    "u": [
+      "Research reviewer\ncredentials / synthetic files",
+      [
+        40,
+        100,
+        450,
+        330
+      ]
+    ],
+    "s": [
+      "MediSummarize AI\nowned document workflow",
+      [
+        650,
+        100,
+        1090,
+        330
+      ]
+    ],
+    "g": [
+      "Generation provider\nmock or configured LLM",
+      [
+        1280,
+        100,
+        1660,
+        330
+      ]
+    ],
+    "e": [
+      "Evaluator\nrun configuration",
+      [
+        40,
+        580,
+        450,
+        780
+      ]
+    ],
+    "d": [
+      "Local stores\nmetadata / sources / vectors",
+      [
+        650,
+        580,
+        1090,
+        780
+      ]
+    ],
+    "r": [
+      "Evaluation log\nJSON and CSV",
+      [
+        1280,
+        580,
+        1660,
+        780
+      ]
+    ]
+  },
+  "edges": [
+    [
+      "u",
+      "s",
+      "request / review"
+    ],
+    [
+      "s",
+      "g",
+      "prompt text"
+    ],
+    [
+      "s",
+      "d",
+      "owned data"
+    ],
+    [
+      "e",
+      "s",
+      "evaluate"
+    ],
+    [
+      "s",
+      "r",
+      "results"
+    ]
+  ]
+}

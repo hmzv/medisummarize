@@ -1,6 +1,20 @@
 # Project Status — MediSummarize AI
 
-Last updated: 2026-10-05
+Last updated: 2026-11-09
+
+## 9 November 2026 handoff
+
+The current frontend implements workspace navigation, fictional record create/search/sort, batch upload and partial retry, processing refresh, document and summary tabs, page-text review, citation highlighting, separate source-page navigation, text/JSON export, demo help and system status. Source upload, re-extraction and deletion invalidate stored summaries; deletion removes derived page/chunk rows. The evaluation harness now uses the shared chunker and embeddings with section-query cosine retrieval instead of passing every file unchanged.
+
+Executed checks: **60 backend tests passed**, **9 frontend tests passed**, TypeScript check passed and production build passed. The backend emits one Starlette TestClient deprecation warning. The corrected evaluation dry run produced **18 mock rows, 0 reportable**. The mechanical interface detector reported no findings. These checks establish application behavior, not clinical quality.
+
+The supplied final-report, SRS and SDS templates are populated in `output/fyp-i/`. Project code: CS-FYP-1019. Supervisor: Dr. Muhammad Yaseen Khan. No co-supervisor. Source section structure and university branding are retained. The package includes implementation defense slides, synthetic fixtures, mock evidence and a submission checklist. Approval and signatures remain pending.
+
+**Open FYP I criteria:** real-model paired baseline, manual desktop/mobile browser upload/download walkthrough, supervisor review and similarity/signature steps. IAB/CDP browser inspection timed out; native Windows browser automation ended because URL policy enforcement was unsupported. No browser visual sign-off is claimed.
+
+Current default generation is mock. The embeddings are lexical hashing and the vector index uses NumPy exact cosine. Neural embeddings, clinical document classification/normalization and PostgreSQL remain gaps or unverified components. See `docs/fyp-i/next-steps.md` and `docs/fyp-i/submission-checklist.md` for the order of work.
+
+The following record is retained as **historical evidence from 5 October 2026**. Its counts and next actions predate this update.
 
 ## Current segment
 

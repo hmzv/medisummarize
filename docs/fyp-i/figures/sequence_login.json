@@ -1,0 +1,40 @@
+{
+  "lifelines": [
+    "Reviewer",
+    "React",
+    "Auth API",
+    "Database"
+  ],
+  "messages": [
+    [
+      0,
+      1,
+      "submit(email, password)"
+    ],
+    [
+      1,
+      2,
+      "POST /auth/login"
+    ],
+    [
+      2,
+      3,
+      "lookup email / bcrypt verify"
+    ],
+    [
+      3,
+      2,
+      "user identity"
+    ],
+    [
+      2,
+      1,
+      "JWT + public user"
+    ],
+    [
+      1,
+      0,
+      "open owned Records"
+    ]
+  ]
+}

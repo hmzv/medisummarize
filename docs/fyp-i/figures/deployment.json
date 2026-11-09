@@ -1,0 +1,71 @@
+{
+  "nodes": {
+    "a": [
+      "Browser\nhttp://localhost:5173",
+      [
+        50,
+        80,
+        500,
+        300
+      ]
+    ],
+    "b": [
+      "Local Vite dev server\n/api proxy to :8000",
+      [
+        625,
+        80,
+        1075,
+        300
+      ]
+    ],
+    "c": [
+      "Local FastAPI process\n127.0.0.1:8000",
+      [
+        1200,
+        80,
+        1650,
+        300
+      ]
+    ],
+    "d": [
+      "Development machine\nSQLite + protected storage",
+      [
+        1200,
+        550,
+        1650,
+        780
+      ]
+    ],
+    "e": [
+      "Optional inference service\n127.0.0.1:11434/v1\nNot currently verified",
+      [
+        625,
+        550,
+        1075,
+        780
+      ]
+    ]
+  },
+  "edges": [
+    [
+      "a",
+      "b",
+      "HTTP"
+    ],
+    [
+      "b",
+      "c",
+      "HTTP"
+    ],
+    [
+      "c",
+      "d",
+      "local I/O"
+    ],
+    [
+      "c",
+      "e",
+      "JSON"
+    ]
+  ]
+}

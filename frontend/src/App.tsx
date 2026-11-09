@@ -5,6 +5,7 @@ import { LoginPage } from "./pages/LoginPage";
 import { RecordDetailPage } from "./pages/RecordDetailPage";
 import { RecordsPage } from "./pages/RecordsPage";
 import { RegisterPage } from "./pages/RegisterPage";
+import { GuidePage, SystemPage } from "./pages/GuidePage";
 
 export default function App() {
   return (
@@ -17,7 +18,10 @@ export default function App() {
           <Route element={<ProtectedRoute />}>
             <Route path="/records" element={<RecordsPage />} />
             <Route path="/records/:recordId" element={<RecordDetailPage />} />
+            <Route path="/guide" element={<GuidePage />} />
+            <Route path="/system" element={<SystemPage />} />
           </Route>
+          <Route path="*" element={<Navigate to="/records" replace />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>

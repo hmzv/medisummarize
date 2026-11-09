@@ -13,6 +13,10 @@ This is an academic prototype, not a production hospital system. It does not cla
 
 ## Current status
 
+**9 November 2026 update:** The frontend now includes record search/sorting, responsive workspace navigation, batch uploads with partial retry, processing-state refresh, document/summary tabs, evidence/source review, text/JSON export, demo help and system status. Source changes invalidate stored summaries. The evaluation harness now performs actual chunk retrieval for its retrieved condition.
+
+**FYP I handoff:** Start with [the submission checklist](docs/fyp-i/submission-checklist.md) and [next steps](docs/fyp-i/next-steps.md). The three supplied university templates have been populated under `output/fyp-i/`, along with an implementation defense deck. The current real-model baseline requirement remains **open**. Mock output is not evidence of model performance.
+
 **Implemented in this repository (FYP-I prototype):**
 
 - FastAPI health/readiness, Alembic, React shell with the required disclaimer
@@ -55,6 +59,8 @@ Optional later:
 - Ollama or another local OpenAI-compatible inference server (Segment 7)
 
 ## Quick start (Windows / PowerShell)
+
+If the environment and dependencies below already exist, run `.\scripts\start-demo.ps1` from the repository root. It starts local services and prints their URLs without changing generation settings.
 
 ### 1. Environment file
 

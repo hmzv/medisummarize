@@ -11,8 +11,8 @@ Research prototype for clinical-document summarization only. Not for diagnosis, 
 7. Upload `data/synthetic/case_e_negation/discharge.txt`.
 8. Click **Extract text**, confirm the negation (`denied chest pain`) is visible.
 9. Click **Generate summary**. If `GENERATION_PROVIDER=mock`, the red **MOCK/TEST OUTPUT** label must be visible.
-10. Click a citation ID. The evidence panel should highlight the passage, show the original filename and page, and is not clinical proof.
+10. Open **Summary & evidence**. Click a citation ID to highlight its evidence passage. Choose **Open source page** to return to the matching extracted page. Compare its content with the original. A source ID is not clinical proof.
 11. Optional: create a second account and open the first record URL — the API must return 404.
-12. Sign out. The record list requires authentication.
+12. Export text and JSON and verify the disclaimer, mock label, provider details and source excerpts. Sign out using the workspace account control. The record list requires authentication.
 
 If Ollama is not running, do not describe the demo as a fully verified AI system.
