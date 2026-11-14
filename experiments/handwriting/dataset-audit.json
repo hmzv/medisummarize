@@ -10,7 +10,8 @@
   },
   "experiment_counts": {
     "validation": 446,
-    "train": 4017,
+    "train": 4012,
+    "excluded": 5,
     "test": 1115
   },
   "unique_labels": 1787,
@@ -30,8 +31,19 @@
   "writer_metadata": "Not supplied in archive labels; prescription/writer leakage cannot be ruled out.",
   "limitations": [
     "Word crops only; no full-page layout recognition benchmark.",
-    "Near-duplicate flags need human inspection; they are not established duplicates.",
+    "Similarity checks cover flags detected by this audit.",
     "No writer-independent claim is supported.",
     "Official test set retained; exact test duplicates excluded from fitting/validation."
-  ]
+  ],
+  "manual_review": {
+    "accepted_training_labels": 50,
+    "reviewed_pairs": 8,
+    "excluded_training_images": [
+      "P1339.jpg",
+      "P2269.jpg",
+      "P2460.jpg",
+      "P4118.jpg",
+      "P5130.jpg"
+    ]
+  }
 }

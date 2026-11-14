@@ -23,7 +23,7 @@ Compare Tesseract, pretrained TrOCR-small, and TrOCR-small fine-tuned on RxHandB
 1. In Kaggle create a notebook, enable Internet and a GPU, then import this notebook.
 2. Run installation once and restart the kernel before continuing.
 3. Download the official ML archive below, or attach your own copy as a private Kaggle dataset and set `ARCHIVE`.
-4. Audit first. Open `review-50.html`, review the 50 training labels, and inspect the eight near-duplicate flags. Record decisions before training.
+4. Run the audit cell. It applies the saved review of 50 training labels and eight flagged pairs, excluding five training crops while preserving the evaluation sets.
 5. Run validation baselines; train for three epochs, selecting the checkpoint by validation CER.
 6. Freeze settings, then enable the final test cell once. Download all output files, including predictions, audit, environment, and the model checkpoint.
 
@@ -46,6 +46,7 @@ assert hashlib.file_digest(ARCHIVE.open('rb'), 'sha256').hexdigest() == expected
 print('Verified official RxHandBD v3 ML archive')
 ''')
 code("# Write the same audited modules kept in the repository.\nMODULES = " + repr({name: (HERE/name).read_text(encoding="utf-8") for name in ["metrics.py", "audit.py", "run_experiment.py"]}) + "\nfor name, source in MODULES.items():\n    (WORK / name).write_text(source, encoding='utf-8')\n")
+code("REVIEW = WORK / 'manual-review.json'\nREVIEW.write_text(" + repr((HERE / "manual-review.json").read_text(encoding="utf-8")) + ", encoding='utf-8')\n")
 code('''import torch, transformers
 print('GPU available:', torch.cuda.is_available())
 assert torch.cuda.is_available(), 'Enable a Kaggle GPU before training'
@@ -53,12 +54,10 @@ environment = {'torch': torch.__version__, 'transformers': transformers.__versio
 (WORK / 'environment.json').write_text(json.dumps(environment, indent=2))
 (WORK / 'pip-freeze.txt').write_text(subprocess.check_output([sys.executable, '-m', 'pip', 'freeze'], text=True))
 AUDIT = WORK / 'audit'
-subprocess.run([sys.executable, str(WORK/'audit.py'), '--archive', str(ARCHIVE), '--out', str(AUDIT)], check=True)
+subprocess.run([sys.executable, str(WORK/'audit.py'), '--archive', str(ARCHIVE), '--out', str(AUDIT), '--review', str(REVIEW)], check=True)
 ''')
-markdown("Open the generated HTML and CSV from Kaggle’s Output files. Inspect `near-duplicate-flags.json` against the corresponding images before freezing the split. Similarity hashes can collide; do not remove samples just because a flag exists. Any split revision must be documented and happen before final testing.")
-code('''MANUAL_REVIEW_DONE = False  # Set True only after inspecting the label sample and near-duplicate flags.
-assert MANUAL_REVIEW_DONE, 'Complete the manual dataset review first'
-OUT = WORK / 'run-01'
+markdown("The reviewed manifest contains 4,012 training crops, 446 validation crops, and 1,115 test crops. The audit outputs include the review decisions and exclusions.")
+code('''OUT = WORK / 'run-reviewed'
 BASE = [sys.executable, str(WORK/'run_experiment.py'), '--archive', str(ARCHIVE), '--manifest', str(AUDIT/'manifest.csv'), '--out', str(OUT)]
 subprocess.run(BASE + ['--phase', 'baseline'], check=True)
 ''')
@@ -77,7 +76,7 @@ code('''# Export only aggregate result JSON to the app. Keep raw predictions for
 results = [json.loads(p.read_text()) for p in OUT.glob('*-test.json')]
 if results:
     (WORK/'experiment-results.json').write_text(json.dumps({'schema_version': 1, 'runs': results}, indent=2))
-    print('Download experiment-results.json plus the entire run-01 and audit folders.')
+    print('Download experiment-results.json plus the entire run-reviewed and audit folders.')
 else:
     print('No final test results to export yet.')
 ''')

@@ -1,0 +1,113 @@
+{
+  "archive_sha256": "c6371c0a3a89301c0b6b2eac1d2d49f6f3d8e559a7a71b338655dde0a6a63b51",
+  "accepted_training_labels": [
+    "P1274.jpg",
+    "P2643.jpg",
+    "P2098.jpg",
+    "P1580.jpg",
+    "P4666.jpg",
+    "P2220.jpg",
+    "P3162.jpg",
+    "P3905.jpg",
+    "P3579.jpg",
+    "P4214.jpg",
+    "P2166.jpg",
+    "P4993.jpg",
+    "P4728.jpg",
+    "P5003.jpg",
+    "P2470.jpg",
+    "P4755.jpg",
+    "P2846.jpg",
+    "P2893.jpg",
+    "P2434.jpg",
+    "P2306.jpg",
+    "P2154.jpg",
+    "P2313.jpg",
+    "P1594.jpg",
+    "P4655.jpg",
+    "P4100.jpg",
+    "P2726.jpg",
+    "P2989.jpg",
+    "P1339.jpg",
+    "P1965.jpg",
+    "P4939.jpg",
+    "P3154.jpg",
+    "P2441.jpg",
+    "P4807.jpg",
+    "P3281.jpg",
+    "P4103.jpg",
+    "P5319.jpg",
+    "P3287.jpg",
+    "P1317.jpg",
+    "P4922.jpg",
+    "P1671.jpg",
+    "P3378.jpg",
+    "P1834.jpg",
+    "P3872.jpg",
+    "P5532.jpg",
+    "P1988.jpg",
+    "P4788.jpg",
+    "P3525.jpg",
+    "P4211.jpg",
+    "P2946.jpg",
+    "P2990.jpg"
+  ],
+  "pairs": [
+    {
+      "train": "P1339.jpg",
+      "evaluation": "P1320.jpg",
+      "split": "validation",
+      "training_action": "exclude",
+      "note": "Reviewer identified the same crop."
+    },
+    {
+      "train": "P1449.jpg",
+      "evaluation": "P0707.jpg",
+      "split": "test",
+      "training_action": "keep",
+      "note": "Same word in different handwriting."
+    },
+    {
+      "train": "P1890.jpg",
+      "evaluation": "P1014.jpg",
+      "split": "test",
+      "training_action": "keep",
+      "note": "Different crops."
+    },
+    {
+      "train": "P2269.jpg",
+      "evaluation": "P2330.jpg",
+      "split": "validation",
+      "training_action": "exclude",
+      "note": "Reviewer identified the same crop at a different zoom."
+    },
+    {
+      "train": "P2460.jpg",
+      "evaluation": "P2136.jpg",
+      "split": "validation",
+      "training_action": "exclude",
+      "note": "Reviewer identified the same crop."
+    },
+    {
+      "train": "P4118.jpg",
+      "evaluation": "P3130.jpg",
+      "split": "validation",
+      "training_action": "exclude",
+      "note": "Reviewer identified the same crop."
+    },
+    {
+      "train": "P4308.jpg",
+      "evaluation": "P2136.jpg",
+      "split": "validation",
+      "training_action": "keep",
+      "note": "Different words and crops."
+    },
+    {
+      "train": "P5130.jpg",
+      "evaluation": "P5137.jpg",
+      "split": "validation",
+      "training_action": "exclude",
+      "note": "Same handwriting with thicker strokes in the first image; treated conservatively as a possible duplicate."
+    }
+  ]
+}

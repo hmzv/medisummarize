@@ -4,11 +4,11 @@ The software workflow and documentation package are prepared. The most important
 
 ## Handwriting experiment prepared on 10 November
 
-Start with `experiments/handwriting/README.md` and import `experiments/handwriting/MediSummarize_Handwriting_Kaggle.ipynb` into Kaggle. The official RxHandBD v3 ML archive is already downloaded and verified locally. Review the 50 training-label examples in `data/runtime/rxhandbd-v3/audit/review-50.html` and eight similarity flags before training. The notebook compares Tesseract, pretrained TrOCR-small and fine-tuned TrOCR-small on word crops, with a frozen final test set.
+Start with `experiments/handwriting/README.md` and import the updated `experiments/handwriting/MediSummarize_Handwriting_Kaggle.ipynb` into Kaggle. The official RxHandBD v3 ML archive is downloaded and verified locally. The notebook applies the completed review of 50 training labels and eight flagged pairs. Its reviewed split contains 4,012 training, 446 validation, and 1,115 test crops.
 
 The local Tesseract validation baseline has actually run: 446 crops, 78.7% CER and 1.1% exact match. Import `experiments/handwriting/local-baseline-results.json` from the app's Experiments page to display it in your own account. The isolated UI-review account already contains it; no existing user's records were changed. TrOCR is still unrun. This OCR work does not replace the separate summarization baseline requirement below.
 
-Your required actions are reviewing labels/similarity flags, starting a Kaggle GPU session, running the notebook, and downloading its outputs. The code, splits, evaluation metrics, export/import path and plain-language instructions are prepared. Do not claim full handwritten-report recognition from this cropped-word experiment.
+Start a Kaggle GPU session, run the notebook, and download its outputs. The experiment measures handwriting recognition on cropped words.
 
 ## Start the existing application
 

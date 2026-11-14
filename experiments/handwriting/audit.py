@@ -19,7 +19,32 @@ from PIL import Image, ImageOps
 EXPECTED_SHA256 = "c6371c0a3a89301c0b6b2eac1d2d49f6f3d8e559a7a71b338655dde0a6a63b51"
 
 
-def audit(archive: Path, out: Path):
+def apply_manual_review(review, archive_hash, near, training, sample):
+    if review["archive_sha256"] != archive_hash:
+        raise ValueError("The manual review belongs to a different archive.")
+    accepted = review["accepted_training_labels"]
+    if sorted(accepted) != sorted(row["filename"] for row in sample):
+        raise ValueError("The accepted labels do not match the sampled training crops.")
+    keys = ("train", "evaluation", "split")
+    flagged = {tuple(pair[key] for key in keys) for pair in near}
+    pairs = review["pairs"]
+    reviewed = [tuple(pair[key] for key in keys) for pair in pairs]
+    if len(reviewed) != len(flagged) or set(reviewed) != flagged:
+        raise ValueError("The manual review does not cover each flagged pair exactly once.")
+    if any(pair["training_action"] not in {"keep", "exclude"} for pair in pairs):
+        raise ValueError("Each reviewed pair must specify keep or exclude.")
+    excluded = {pair["train"] for pair in pairs if pair["training_action"] == "exclude"}
+    for row in training:
+        if row["filename"] in excluded:
+            row["split"] = "excluded"
+    return {
+        "accepted_training_labels": len(accepted),
+        "reviewed_pairs": len(pairs),
+        "excluded_training_images": sorted(excluded),
+    }
+
+
+def audit(archive: Path, out: Path, review_path: Path | None = None):
     out.mkdir(parents=True, exist_ok=True)
     archive_hash = hashlib.file_digest(archive.open("rb"), "sha256").hexdigest()
     if archive_hash != EXPECTED_SHA256:
@@ -80,6 +105,12 @@ def audit(archive: Path, out: Path):
         for right in eval_candidates:
             if left["pixel_sha256"] != right["pixel_sha256"] and (lh ^ int(right["dhash"], 16)).bit_count() <= 2:
                 near.append({"train": left["filename"], "evaluation": right["filename"], "split": right["split"]})
+    sample = random.Random(1019).sample(train_candidates, min(50, len(train_candidates)))
+    manual_review = None
+    if review_path is not None:
+        review = json.loads(review_path.read_text(encoding="utf-8"))
+        manual_review = apply_manual_review(review, archive_hash, near, train_candidates, sample)
+        (out / "review-decisions.json").write_text(json.dumps(review, indent=2), encoding="utf-8")
     label_names = [r["path"] for r in rows]
     report = {
         "dataset": "RxHandBD v3 ML", "doi": "10.17632/dsb5r6vskg.3", "license": "CC BY 4.0",
@@ -94,24 +125,27 @@ def audit(archive: Path, out: Path):
         "near_duplicate_flags": len(near),
         "split_seed": 1019, "validation_fraction_groups": 0.1,
         "writer_independent": False, "writer_metadata": "Not supplied in archive labels; prescription/writer leakage cannot be ruled out.",
-        "limitations": ["Word crops only; no full-page layout recognition benchmark.", "Near-duplicate flags need human inspection; they are not established duplicates.", "No writer-independent claim is supported.", "Official test set retained; exact test duplicates excluded from fitting/validation."]
+        "limitations": ["Word crops only; no full-page layout recognition benchmark.", "Similarity checks cover flags detected by this audit.", "No writer-independent claim is supported.", "Official test set retained; exact test duplicates excluded from fitting/validation."]
     }
+    if manual_review is not None:
+        report["manual_review"] = manual_review
     for name, payload in [("audit.json", report), ("duplicate-groups.json", [[{k:r[k] for k in ("path","text","official_split")} for r in v] for v in groups.values() if len(v)>1]), ("near-duplicate-flags.json", near)]:
         (out / name).write_text(json.dumps(payload, indent=2), encoding="utf-8")
     with (out / "manifest.csv").open("w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=list(rows[0])); writer.writeheader(); writer.writerows(rows)
-    sample = random.Random(1019).sample(train_candidates, min(50, len(train_candidates)))
     contact = "<!doctype html><meta charset='utf-8'><title>RxHandBD training-label review</title><style>body{font:16px system-ui;margin:32px}section{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}article{border:1px solid #aaa;padding:12px}img{max-width:100%;height:140px;object-fit:contain}label{display:block}</style><h1>Review 50 training labels</h1><p>Mark unreadable crops, wrong labels, ambiguous digits, and unexpected language in manual-review.csv. Do not silently correct test labels.</p><section>"
     for r in sample:
         contact += f'<article><img alt="Handwritten training crop" src="data:image/png;base64,{thumbnails[r["path"]]}"><h2>{html.escape(r["text"])}</h2><p>{html.escape(r["filename"])}</p></article>'
     (out / "review-50.html").write_text(contact + "</section>", encoding="utf-8")
     with (out / "manual-review.csv").open("w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f); writer.writerow(["filename", "provided_label", "decision", "notes"])
-        writer.writerows((r["filename"], r["text"], "pending", "") for r in sample)
+        decision = "accept" if manual_review is not None else "pending"
+        writer.writerows((r["filename"], r["text"], decision, "") for r in sample)
     print(json.dumps(report, indent=2))
     return report
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(); parser.add_argument("--archive", type=Path, required=True); parser.add_argument("--out", type=Path, required=True)
-    args = parser.parse_args(); audit(args.archive, args.out)
+    parser.add_argument("--review", type=Path, help="Apply the recorded review for this exact archive and split.")
+    args = parser.parse_args(); audit(args.archive, args.out, args.review)
